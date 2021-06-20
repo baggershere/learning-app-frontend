@@ -7,7 +7,7 @@ import "./index.css";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { useCookies } from "react-cookie";
 import { purple } from "@material-ui/core/colors";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { setUserState } from "./redux/user/user.actions";
 import { useEffect } from "react";
 import GameScreen from "./screens/GameScreen";
@@ -32,25 +32,13 @@ const theme = createMuiTheme({
   },
 });
 
-function App() {
+function App({state, setUserState}) {
   const [cookies, setCookies] = useCookies(["authorization"]);
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state);
 
   useEffect(() => {
-    dispatch(setUserState());
+    setUserState();
   }, []);
-
-  // useEffect(() => {
-  //   if (cookies.authorization && cookies.authorization.length) {
-  //     // let jwt = cookies.authorization.split(" ")[1];
-  //     // const data = JSON.parse(atob(jwt.split(".")[1]));
-  //     const data = cookies.authorization;
-  //     const decoded = JSON.parse(atob(data.split(".")[1]));
-  //     console.log(decoded)
-  //     dispatch(setUserState(decoded))
-  //   }
-  // }, []);
+  
   if (state.user.loading) {
     return <h1>LOADING</h1>;
   } else {
@@ -70,4 +58,6 @@ function App() {
   }
 }
 
-export default App;
+export default connect(state => ({state:state}), dispatch => ({
+  setUserState: () => dispatch(setUserState())
+}))(App);

@@ -1,9 +1,19 @@
-import { createStore, applyMiddleware } from 'redux';
-import ReduxThunk from 'redux-thunk';
-import RootReducer from '../../redux/rootReducer';
+import checkPropTypes from 'check-prop-types';
+import { applyMiddleware, createStore } from 'redux';
+import rootReducer from '../../redux/rootReducer';
+import thunk from 'redux-thunk'
 
-export const middlewares = [ReduxThunk];
+export const findByTestAtrr = (component, attr) => {
+    const wrapper = component.find(`[data-test='${attr}']`);
+    return wrapper;
+};
 
-export const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore)
+export const checkProps = (component, expectedProps) => {
+    const propsErr = checkPropTypes(component.propTypes, expectedProps, 'props', component.name);
+    return propsErr;
+};
 
-export const store = createStoreWithMiddleware(RootReducer)
+export const testStore = (initialState) => {
+    const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+    return createStoreWithMiddleware(rootReducer, initialState);
+};

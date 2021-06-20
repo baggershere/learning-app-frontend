@@ -1,4 +1,4 @@
-import { makeStyles, Grid, Paper } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import React from 'react'
 import ListTitle from './ListTitle'
 import DisplayGrid from './DisplayGrid'

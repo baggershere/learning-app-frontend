@@ -25,9 +25,9 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import setCookie from "../utils/setCookie";
 import { useCookies } from "react-cookie";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import { login, resetSelectedChild } from "../../redux/user/user.actions";
-import { resetState } from "../../redux/signup/signup.actions";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   form_container: {
@@ -50,21 +50,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginForm = () => {
+const LoginForm = ({ state, login }) => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
   const history = useHistory();
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    login(email, password)
   };
-  useEffect(() => {
+  React.useEffect(() => {
     if (state.user.isAuth) {
       history.push("/profile");
     }
@@ -136,26 +134,6 @@ const LoginForm = () => {
   }
 };
 
-export default LoginForm;
-
-// await axios
-//   .post(
-//     "http://localhost:5000/api/login",
-//     {
-//       email,
-//       password,
-//     },
-//     { withCredentials: true }
-//   )
-//   .then((resp) => {
-//     setCookie(resp.data.accessToken);
-//     const children = resp.data.data.children;
-//     console.log(children);
-//     dispatch(setChildren(children))
-//     dispatch(setChild(children[0]))
-//     //history.push("/profile");
-//   })
-//   .catch((e) => {
-//     console.log(e);
-//     setError(e.response.data.message);
-//   });
+export default connect((state) => ({ state: state }), dispatch => ({
+  login: (email, password) => dispatch(login(email, password))
+}))(LoginForm);

@@ -1,6 +1,7 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { addScores } from "../../redux/API/API.actions";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import {
   calculateCategoryX,
   calculateCategoryY,
@@ -8,8 +9,7 @@ import {
   shuffle,
 } from "./util";
 
-const NounsGame = () => {
-  const dispatch = useDispatch();
+const NounsGame = ({ addScore }) => {
   const containerRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const createjs = window.createjs;
@@ -269,24 +269,18 @@ const NounsGame = () => {
       gameState = "OPTIONS";
       runGameLoop();
     });
-    window.addEventListener("resize", handleResize
-      // window.innerWidth < 900 ? (phone = true) : (phone = false);
-      // stage.removeAllEventListeners("click");
-      // stage.removeAllChildren();
-      // resizeCanvas();
-      // runGameLoop();
-    );
+    window.addEventListener("resize", handleResize);
     resizeCanvas();
     runGameLoop();
   };
 
   const handleResize = (e) => {
     window.innerWidth < 900 ? (phone = true) : (phone = false);
-      stage.removeAllEventListeners("click");
-      stage.removeAllChildren();
-      resizeCanvas();
-      runGameLoop();
-  }
+    stage.removeAllEventListeners("click");
+    stage.removeAllChildren();
+    resizeCanvas();
+    runGameLoop();
+  };
 
   // const showCurrentTimeOnScreen = () => {
   //   let time = parseInt(Math.floor(e.target.getTime() / 1000));
@@ -307,7 +301,7 @@ const NounsGame = () => {
   const runLevelScreen = () => {
     if (score >= 10) {
       gameState = "RUNENDLEVEL";
-      dispatch(addScores(calculateError(score, wrong), "Nouns"));
+      addScore(calculateError(score, wrong), "Nouns");
       runGameLoop();
       return;
     }
@@ -728,8 +722,8 @@ const NounsGame = () => {
   React.useEffect(() => {
     init();
     return () => {
-      window.removeEventListener("resize", handleResize)
-    }
+      window.removeEventListener("resize", handleResize);
+    };
   });
 
   return (
@@ -744,4 +738,6 @@ const NounsGame = () => {
   );
 };
 
-export default NounsGame;
+export default connect(null, (dispatch) => ({
+  addScore: (score, gameName) => dispatch(addScores(score, gameName)),
+}))(NounsGame);

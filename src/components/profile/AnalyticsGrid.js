@@ -6,9 +6,10 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import AverageScoresByGame from "./AverageScoresByGame";
-import RecentList from './RecentList'
+import RecentList from "./RecentList";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -34,8 +35,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const AnalyticsGrid = () => {
-  const state = useSelector((state) => state);
+const AnalyticsGrid = ({state}) => {
   const [loading, setLoading] = useState(true);
   const [gameType, setGameType] = useState("");
   const classes = useStyles();
@@ -46,8 +46,7 @@ const AnalyticsGrid = () => {
     ];
     return gameNames;
   };
-  useEffect(() => {
-    
+  React.useEffect(() => {
     setLoading(false);
     setGameType(getUniqueGameNames()[0]);
   }, [state.profile]);
@@ -85,14 +84,20 @@ const AnalyticsGrid = () => {
           />
         </Grid>
         <Grid item xs={12} md={12}>
-          <Typography variant="h3" align="center">Recent scores</Typography>
+          <Typography variant="h3" align="center">
+            Recent scores
+          </Typography>
         </Grid>
         <Grid item xs={12} md={12}>
-          <RecentList game={gameType} child={state.user.selectedChild} data={state.profile.recentScores}/>
+          <RecentList
+            game={gameType}
+            child={state.user.selectedChild}
+            data={state.profile.recentScores}
+          />
         </Grid>
       </Grid>
     </Container>
   );
 };
 
-export default AnalyticsGrid;
+export default connect(state => ({state:state}), null)(AnalyticsGrid);

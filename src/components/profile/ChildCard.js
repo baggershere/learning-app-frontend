@@ -12,7 +12,8 @@ import {
   DialogActions,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import { SET_SELECTED_CHILD } from "../../redux/user/user.types";
 import { capitalize } from "../utils/capitalize";
 import { removeChild } from "../../redux/API/API.actions";
@@ -35,14 +36,18 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const ChildCard = ({ name }) => {
+const ChildCard = ({
+  name,
+  state,
+  resetSelectedChild,
+  removeChild,
+  setSelectedChild,
+}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const state = useSelector((state) => state);
-  const dispatch = useDispatch();
 
   const handleOpen = (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     setOpen(true);
   };
 
@@ -53,14 +58,14 @@ const ChildCard = ({ name }) => {
   const handleSubmit = () => {
     setOpen(false);
     if (state.user.selectedChild === name) {
-      dispatch(resetSelectedChild());
+      resetSelectedChild();
     }
-    dispatch(removeChild(name));
+    removeChild(name);
   };
 
   const handleCardClick = (e) => {
     e.stopPropagation();
-    dispatch({ type: SET_SELECTED_CHILD, payload: name });
+    setSelectedChild(name);
   };
 
   return (
@@ -100,4 +105,16 @@ const ChildCard = ({ name }) => {
   );
 };
 
-export default ChildCard;
+export default connect(
+  (state) => {
+    return {
+      state: state,
+    };
+  },
+  (dispatch) => ({
+    setSelectedChild: (name) =>
+      dispatch({ type: SET_SELECTED_CHILD, payload: name }),
+      resetSelectedChild: () => dispatch(resetSelectedChild()),
+  removeChild: (name) => dispatch(removeChild(name))
+  })
+)(ChildCard);
