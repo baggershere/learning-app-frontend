@@ -3,7 +3,8 @@ import NounsGame from "./NounsGame";
 import { Container, makeStyles, Typography } from "@material-ui/core";
 import { capitalize } from "@material-ui/core";
 import "./gameStyles.css";
-import Sentences from './Sentences';
+import Sentences from "./Sentences";
+import Spelling from "./Spelling";
 
 const useStyles = makeStyles({
   flexbox: {
@@ -26,6 +27,8 @@ const Game = ({ name }) => {
           <NounsGame />
         ) : name === "sentences" ? (
           <Sentences />
+        ) : name === "spelling" ? (
+          <Spelling />
         ) : (
           <Typography align="center">
             Sorry, there is no game available under this name!

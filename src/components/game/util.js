@@ -21,15 +21,9 @@ export const calculateCategoryY = (height, index) => {
 export const selectRandomFromArray = (array) => {
   return array[Math.floor(Math.random() * array.length)];
 };
-// export function shuffle(array) {
-//   //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-//   for (let i = array.length - 1; i > 0; i--) {
-//     const j = Math.floor(Math.random() * (i + 1));
-//     [array[i], array[j]] = [array[j], array[i]];
-//   }
-//   return array;
-// }
+
 export function shuffle(array) {
+  //ref = https://stackoverflow.com/a/2450976
   var currentIndex = array.length,
     randomIndex;
 
@@ -121,15 +115,15 @@ export const placeBox = (arrayLength, index, stage, phone, type) => {
     if (arrayLength === 3) {
       if (index === 0) {
         x = stage.canvas.width * 0.125;
-        y = stage.canvas.height * 0.5;
+        y = type === "word" ? stage.canvas.height * 0.6 : stage.canvas.height * 0.5;
       }
       if (index === 1) {
         x = stage.canvas.width * 0.375;
-        y = stage.canvas.height * 0.5;
+         y = type === "word" ? stage.canvas.height * 0.6 : stage.canvas.height * 0.5;
       }
       if (index === 2) {
         x = stage.canvas.width * 0.625;
-        y = stage.canvas.height * 0.5;
+         y = type === "word" ? stage.canvas.height * 0.6 : stage.canvas.height * 0.5;
       }
     }
     if (arrayLength === 4) {
@@ -209,3 +203,76 @@ export const mouseObjCollision = (x, y, obj2) => {
   }
   return true;
 };
+
+export const checker = arr => arr.every(v => v !== "");
+
+export const computerKeyboard = [
+  {key:'a', row:1, id: 1, break: false},
+  {key:'b', row:1, id: 2, break: false},
+  {key:'c', row:1, id: 3, break: false},
+  {key:'d', row:1, id: 4, break: false},
+  {key:'e', row:1, id: 5, break: false},
+  {key:'f', row:1, id: 6, break: false},
+  {key:'g', row:1, id: 7, break: false},
+  {key:'h', row:1, id: 8, break: false},
+  {key:'i', row:1, id: 9, break: true},
+  {key:'j', row:2, id: 10, break: false},
+  {key:'k', row:2, id: 11, break: false},
+  {key:'l', row:2, id: 12, break: false},
+  {key:'m', row:2, id: 13, break: false},
+  {key:'n', row:2, id: 14, break: false},
+  {key:'o', row:2, id: 15, break: false},
+  {key:'p', row:2, id: 16, break: false},
+  {key:'q', row:2, id: 17, break: false},
+  {key:'r', row:2, id: 18, break: true},
+  {key:'s', row:3, id: 19, break: false},
+  {key:'t', row:3, id: 20, break: false},
+  {key:'u', row:3, id: 21, break: false},
+  {key:'v', row:3, id: 22, break: false},
+  {key:'w', row:3, id: 23, break: false},
+  {key:'x', row:3, id: 24, break: false},
+  {key:'y', row:3, id: 25, break: false},
+  {key:'z', row:3, id: 26, break: false},
+]
+export const phoneKeyboard = [
+  {key:'a', row:1, id: 1, break: false},
+  {key:'b', row:1, id: 2, break: false},
+  {key:'c', row:1, id: 3, break: false},
+  {key:'d', row:1, id: 4, break: false},
+  {key:'e', row:1, id: 5, break: false},
+  {key:'f', row:1, id: 6, break: false},
+  {key:'g', row:1, id: 7, break: true},
+  {key:'h', row:2, id: 8, break: false},
+  {key:'i', row:2, id: 9, break: false},
+  {key:'j', row:2, id: 10, break: false},
+  {key:'k', row:2, id: 11, break: false},
+  {key:'l', row:2, id: 12, break: false},
+  {key:'m', row:2, id: 13, break: false},
+  {key:'n', row:2, id: 14, break: true},
+  {key:'o', row:3, id: 15, break: false},
+  {key:'p', row:3, id: 16, break: false},
+  {key:'q', row:3, id: 17, break: false},
+  {key:'r', row:3, id: 18, break: false},
+  {key:'s', row:3, id: 19, break: false},
+  {key:'t', row:3, id: 20, break: false},
+  {key:'u', row:3, id: 21, break: true},
+  {key:'v', row:4, id: 22, break: false},
+  {key:'w', row:4, id: 23, break: false},
+  {key:'x', row:4, id: 24, break: false},
+  {key:'y', row:4, id: 25, break: false},
+  {key:'z', row:4, id: 26, break: false},
+]
+
+export const calcKeyYPosition = (phone,key) => {
+  if (phone) {
+    if (key.row == 1) return 510;
+    if (key.row == 2) return 570; 
+    if (key.row == 3) return 630; 
+    if (key.row == 4) return 690; 
+  }
+  if (!phone) {
+    if (key.row == 1) return 360;
+    if (key.row == 2) return 420; 
+    if (key.row == 3) return 480; 
+  }
+}

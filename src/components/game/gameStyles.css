@@ -2,7 +2,7 @@
     position: relative;
     max-width:100%;
     /* margin: auto; */
-    background-color: aqua;
+    /* background-color: aqua; */
 }
 canvas {
     position: absolute;

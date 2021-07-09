@@ -19,9 +19,9 @@ const DisplayGrid = () => {
         "https://images.pexels.com/photos/194511/pexels-photo-194511.jpeg?cs=srgb&dl=pexels-lalesh-aldarwish-194511.jpg&fm=jpg",
     },
     {
-      name: "Verbs Game",
-      id:"verbs",
-      details: "Game to improve your verbs. Many categories available",
+      name: "Spelling",
+      id:"spelling",
+      details: "Game to improve your spelling. Many categories available",
       imageUrl:
         "https://images.pexels.com/photos/194511/pexels-photo-194511.jpeg?cs=srgb&dl=pexels-lalesh-aldarwish-194511.jpg&fm=jpg",
     },

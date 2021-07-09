@@ -1,31 +1,34 @@
 import React from "react";
+import { connect } from "react-redux";
 import {
+  checker,
   collision,
   mouseObjCollision,
   placeBox,
   selectRandomFromArray,
   shuffle,
 } from "./util";
+import { addScores } from "../../redux/API/API.actions";
 
-const Sentences = () => {
+const Sentences = ({ addScore }) => {
   const containerRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const createjs = window.createjs;
   const manifest = [
     {
-      id: "tree",
+      id: "present_apples",
       type: createjs.Types.IMAGE,
-      src: "https://db3pap007files.storage.live.com/y4mVq1Hesme1E8q6BkOZ_nHE6N2Oa7SItuOgI113jBRzI-_rQB9zIKvL7v2pKKZnoGsPrMiIUQI8DYUl_bQQz77-1NQzZdxVUwDFwImsu1MBvUGtE50EcJsaAX7K33EYM-1ZPnfa7X2IaE1xx9WohyW43LywM3Yap2PIbL-NBEP74Sw8vqfde0pVd2J7ALCFxau?width=356&height=400&cropmode=none",
+      src: "https://f000.backblazeb2.com/file/audio1262/sentences/present/present_apples.jpg",
     },
     {
-      id: "plane",
+      id: "present_bananas",
       type: createjs.Types.IMAGE,
-      src: "https://db3pap007files.storage.live.com/y4m7y0fQKNnYjL-5PztzRM5B6Ar1sNjHkZsq0rLc4L_Mvpy0pX6Raudqr1UpXb7xiG44tHSglPEN6piU0K-hSHSqhbNE_KyQyQe6JiK0GG-H2VLN4SLWGujQxVnUVHgF-KzMQYvTanr1TQnwujI54OImhyHJJZDTDiNf1WPXR9aQdFixJnPDNwZuzqxktpSoDuA?width=400&height=400&cropmode=none",
+      src: "https://f000.backblazeb2.com/file/audio1262/sentences/present/present_bananas.png",
     },
     {
-      id: "Italy",
+      id: "present_water",
       type: createjs.Types.IMAGE,
-      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/italy.png",
+      src: "https://f000.backblazeb2.com/file/audio1262/sentences/present/present_water.jpg",
     },
     {
       id: "Japan",
@@ -51,16 +54,19 @@ const Sentences = () => {
 
   let selectedCategory;
   let stage, phone, loader, percentLoaded, offset;
+  let correctBoxes = 0;
   let gameState = "LOADING";
   let categories = ["Present Simple", "Past Simple", "Future Simple"];
-  let gameLevel = 1;
+  let gameLevel = 10;
   let presentSimple = [
-    ["I", "eat", "apples"],
-    // ["He", "eats", "bananas"],
-    // ["We", "drink", "water"],
+    { sentence: ["I", "eat", "apples"], imgID: "present_apples" },
+    { sentence: ["He", "eats", "bananas"], imgID: "present_bananas" },
+    { sentence: ["We", "drink", "water"], imgID: "present_water" },
   ];
   let currentBoxes = [];
   let currentWords = [];
+  let incorrectGuesses = 0;
+  let correctGuesses = 0;
 
   const init = () => {
     stage = new createjs.Stage(canvasRef.current);
@@ -104,6 +110,11 @@ const Sentences = () => {
   const runLevelScreen = () => {
     let levelScreen = new LevelScreen();
     levelScreen.displayLevelScreen();
+  };
+
+  const runEndLevelScreen = () => {
+    let endLevelScreen = new EndLevelScreen();
+    endLevelScreen.displayEndLevel();
   };
 
   // ###################################### Game classes #################################################
@@ -202,8 +213,7 @@ const Sentences = () => {
       text.font = "30px Open Sans";
       text.x = stage.canvas.width / 2 - text.getMeasuredWidth() / 2;
       text.y = stage.canvas.height * 0.25;
-      text.alpha = 0;
-      createjs.Tween.get(text).to({ alpha: 1 }, 300);
+
       stage.addChild(text);
     }
     runCategoriesScreen() {
@@ -216,18 +226,25 @@ const Sentences = () => {
   class LevelScreen extends Screen {
     constructor() {
       super();
-      this.emptyBoxes = [];
-      this.wordContainers = [];
+      this.currentWords = [];
+      this.currentBoxes = [];
+      this.playerWords = [];
+      this.imgID = "";
     }
     selectRandomSentence() {
       if (selectedCategory === "Present Simple") {
-        const randomSentence = selectRandomFromArray(presentSimple);
+        const randomLevel = selectRandomFromArray(presentSimple);
+        const randomSentence = randomLevel.sentence;
+        this.imgID = randomLevel.imgID;
         const randomSentenceClone = [...randomSentence];
         const shuffledArray = shuffle(randomSentenceClone);
         // Assign to class
         this.randomSentence = randomSentence;
         this.shuffledArray = shuffledArray;
       }
+    }
+    buildPlayerWordsArray() {
+      this.currentWords.forEach(() => this.playerWords.push(""));
     }
     createEmpytyBoxes() {
       // Create a container for each word in the target sentence.
@@ -256,13 +273,13 @@ const Sentences = () => {
         const boxShape = new createjs.Shape();
         boxShape.color = boxShape.graphics.beginFill("white").command;
         boxShape.stroke = boxShape.graphics
-          .setStrokeStyle(1)
+          .setStrokeStyle(2)
           .beginStroke("black").command;
         boxShape.graphics.drawRect(0, 0, phone ? 130 : 150, 50);
 
         boxContainer.addChild(boxShape);
 
-        currentBoxes.push(boxContainer);
+        this.currentBoxes.push(boxContainer);
       }
     }
     displayRandomWords() {
@@ -297,111 +314,239 @@ const Sentences = () => {
         wordContainer.addChild(wordShape, wordText);
         // Add dragging event listener
 
-        currentWords.push(wordContainer);
+        this.currentWords.push(wordContainer);
       }
     }
+    displayLevelImage() {
+      const imageContainer = new createjs.Container();
+
+      const image = new createjs.Bitmap(loader.getResult(this.imgID));
+      image.scaleX = 250 / image.image.width;
+      image.scaleY = 250 / image.image.height;
+      imageContainer.x = stage.canvas.width * 0.5 - 250 / 2;
+      imageContainer.y = phone ? 50 : 10;
+      imageContainer.addChild(image);
+      stage.addChild(imageContainer);
+    }
     handleMovement() {
-      for (let i = 0; i < currentBoxes.length; i++) {
-        stage.addChild(currentBoxes[i]);
+      console.log(this.playerWords);
+      for (let i = 0; i < this.currentBoxes.length; i++) {
+        stage.addChild(this.currentBoxes[i]);
       }
-      for (let i = 0; i < currentWords.length; i++) {
-        stage.addChild(currentWords[i]);
-        
+      for (let i = 0; i < this.currentWords.length; i++) {
+        stage.addChild(this.currentWords[i]);
       }
+      for (let i = 0; i < this.currentWords.length; i++) {
+        let origX;
+        let origY;
 
-      for (let i = 0; i < currentWords.length; i++) {
-        let origX = currentWords[i].x;
-        let origY = currentWords[i].y;
+        this.currentWords[i].on("mousedown", (e) => {
+          origX = e.currentTarget.x;
+          origY = e.currentTarget.y;
 
-        currentWords[i].on("mousedown", (e) => {
-          console.log(origX);
           offset = {
-            x: currentWords[i].x - e.stageX,
-            y: currentWords[i].y - e.stageY,
+            x: this.currentWords[i].x - e.stageX,
+            y: this.currentWords[i].y - e.stageY,
           };
-          stage.setChildIndex(currentWords[i], stage.getNumChildren() - 1);
+          stage.setChildIndex(this.currentWords[i], stage.getNumChildren() - 1);
         });
 
-        currentWords[i].on("pressmove", (e) => {
+        this.currentWords[i].on("pressmove", (e) => {
           e.currentTarget.x = e.stageX + offset.x;
           e.currentTarget.y = e.stageY + offset.y;
 
-          for (let j = 0; j < currentBoxes.length; j++) {
-            if (mouseObjCollision(e.stageX, e.stageY, currentBoxes[j])) {
+          for (let j = 0; j < this.currentBoxes.length; j++) {
+            if (mouseObjCollision(e.stageX, e.stageY, this.currentBoxes[j])) {
             }
           }
         });
 
-        currentWords[i].on("pressup", (e) => {
-          currentBoxes.forEach((box) => {
-            if (mouseObjCollision(e.stageX, e.stageY, box)) {
-              currentWords.forEach((word) => {
-                if (word.name !== currentWords[i].name && word.x === box.x) {
-                  word.x = origX;
-                  word.y = origY;
-                } else {
-                  currentWords[i].x = box.x;
-                  currentWords[i].y = box.y;
-                }
-              });
+        this.currentWords[i].on("pressup", (e) => {
+          for (let j = 0; j < this.currentBoxes.length; j++) {
+            if (mouseObjCollision(e.stageX, e.stageY, this.currentBoxes[j])) {
+              if (this.playerWords[j] !== "") {
+                this.currentWords[i].x = origX;
+                this.currentWords[i].y = origY;
+              }
+              if (this.playerWords[j] === "") {
+                this.currentWords[i].x = this.currentBoxes[j].x;
+                this.currentWords[i].y = this.currentBoxes[j].y;
+                this.playerWords[j] = this.currentWords[i].name.slice(0, -5);
+                this.currentWords[i].removeAllEventListeners();
+              }
             }
-          });
+          }
+          if (checker(this.playerWords)) {
+            if (this.checkAnswers()) {
+              correctGuesses++;
+              this.showCorrect();
+            }
+            if (!this.checkAnswers()) {
+              incorrectGuesses++;
+              this.showIncorrect();
+            }
+          }
+          if (!checker(this.playerWords)) {
+            console.log("Not correct");
+          }
         });
       }
+    }
+    showCorrect() {
+      this.currentBoxes.forEach((box) => {
+        box.children[0].stroke.style = "green";
+      });
+      const text = new createjs.Text();
+      text.text = "Correct!";
+      text.font = "20px Open Sans";
+      text.x = stage.canvas.width * 0.5 - text.getMeasuredWidth() / 2;
+      text.y = stage.canvas.height * 0.625;
+      text.alpha = 0;
+      createjs.Tween.get(text).to({ alpha: 1 }, 300);
+      stage.addChild(text);
 
-      //  wordContainer.on("mousedown", (e) => {
-      //     offset = {
-      //       x: wordContainer.x - e.stageX,
-      //       y: wordContainer.y - e.stageY,
-      //     };
-      //   });
+      const buttonContainer = new createjs.Container();
+      buttonContainer.x = stage.canvas.width / 2 - 75;
+      buttonContainer.y = stage.canvas.height * 0.7;
+      const buttonText = new createjs.Text();
+      buttonText.text = "Continue";
+      buttonText.font = "20px Open Sans";
 
-      //   wordContainer.on("pressmove", (e) => {
-      //     e.currentTarget.x = e.stageX + offset.x;
-      //     e.currentTarget.y = e.stageY + offset.y;
-      //     stage.children.forEach((child) => {
-      //       if (
-      //         child.name &&
-      //         child.name.slice(child.name.length - 4) === "_box"
-      //       ) {
-      //         if (
-      //           mouseObjCollision(e.stageX, e.stageY, child)
-      //         ) {
-      //           child.children[0].stroke.style = "blue";
-      //         }
-      //         if (!collision(e.currentTarget, child)) {
-      //           child.children[0].stroke.style = "black";
-      //         }
-      //       }
-      //     });
-      //   });
+      const buttonShape = new createjs.Shape();
+      buttonShape.color = buttonShape.graphics.beginFill("pink").command;
+      buttonShape.graphics.drawRect(0, 0, 150, 50);
+      buttonContainer.addChild(buttonShape, buttonText);
 
-      //   wordContainer.on("pressup", e => {
-      //     stage.children.forEach((child) => {
-      //       if (
-      //         child.name &&
-      //         child.name.slice(child.name.length - 4) === "_box"
-      //       ) {
-      //         if (
-      //           mouseObjCollision(e.stageX, e.stageY, child)
-      //         ) {
+      buttonContainer.on("mouseover", (e) => {
+        buttonShape.color.style = "red";
+      });
+      buttonContainer.on("mouseout", (e) => {
+        buttonShape.color.style = "pink";
+      });
 
-      //           e.currentTarget.x = child.getBounds().x;
-      //           e.currentTarget.y = child.getBounds().y;
-      //         }
-      //         if (!collision(e.currentTarget, child)) {
-      //           child.children[0].stroke.style = "black";
-      //         }
-      //       }
-      //     });
-      //   })
+      buttonContainer.on("click", (e) => {
+        fadeOutChildren(300);
+        setTimeout(() => {
+          stage.removeAllChildren();
+          gameLevel++;
+          if (gameLevel === 11) gameState = "RUN_END_LEVEL";
+          this.currentWords = [];
+          this.currentBoxes = [];
+          this.playerWords = [];
+          runGameLoop();
+        }, 500);
+      });
+
+      stage.addChild(buttonContainer);
+      //fadeOutChildren(300)
+      // setTimeout(() => {
+      //   stage.removeAllChildren();
+      //   this.currentWords = [];
+      //   this.currentBoxes = [];
+      //   this.playerWords = [];
+      //   runGameLoop();
+      // }, 1000);
+    }
+    showIncorrect() {
+      this.currentBoxes.forEach((box) => {
+        console.log(box.children[0]);
+        box.children[0].stroke.style = "red";
+      });
+      // Add incorrect text
+      const text = new createjs.Text();
+      text.text = "不对， 在试一试";
+      text.font = "20px Open Sans";
+      text.x = stage.canvas.width * 0.5 - text.getMeasuredWidth() / 2;
+      text.y = stage.canvas.height * 0.625;
+      text.alpha = 0;
+      createjs.Tween.get(text).to({ alpha: 1 }, 300);
+      stage.addChild(text);
+      setTimeout(() => {
+        stage.removeAllChildren();
+        this.currentWords = [];
+        this.currentBoxes = [];
+        this.playerWords = [];
+        this.replayLevel();
+      }, 2000);
+    }
+    checkAnswers() {
+      return this.playerWords.every(
+        (value, index) => value === this.randomSentence[index]
+      );
+    }
+    displayCurrentLevel() {
+      const levelText = new createjs.Text();
+      levelText.text = `${gameLevel}/10`;
+      levelText.font = "20px Open Sans";
+      levelText.x = 10;
+      levelText.y = 10;
+      stage.addChild(levelText);
+    }
+    replayLevel() {
+      this.createBackground();
+      this.displayCurrentLevel();
+      this.createEmpytyBoxes();
+      this.displayLevelImage();
+      this.displayRandomWords();
+      this.buildPlayerWordsArray();
+      this.handleMovement();
     }
     displayLevelScreen() {
       this.createBackground();
+      this.displayCurrentLevel();
       this.selectRandomSentence();
+      this.displayLevelImage();
       this.createEmpytyBoxes();
       this.displayRandomWords();
+      this.buildPlayerWordsArray();
       this.handleMovement();
+    }
+  }
+
+  class EndLevelScreen extends Screen {
+    constructor() {
+      super();
+    }
+    displayText() {
+      const text = new createjs.Text();
+      text.text = "Game complete";
+      text.font = "25px Open Sans";
+      text.x = stage.canvas.width * 0.5 - text.getMeasuredWidth() / 2;
+      text.y = stage.canvas.height * 0.5 - text.getMeasuredHeight() / 2;
+
+      const score = new createjs.Text();
+      score.text = "Score: " + calculateError();
+      score.font = "20px Open Sans";
+      score.x = score.x =
+        stage.canvas.width * 0.5 - score.getMeasuredWidth() / 2;
+      score.y = stage.canvas.height * 0.6 - score.getMeasuredHeight() / 2;
+
+      const buttonContainer = new createjs.Container();
+      buttonContainer.x = stage.canvas.width / 2 - 75;
+      buttonContainer.y = stage.canvas.height * 0.7;
+      const buttonText = new createjs.Text();
+      buttonText.text = "Play again";
+      buttonText.font = "20px Open Sans";
+
+      const buttonShape = new createjs.Shape();
+      buttonShape.color = buttonShape.graphics.beginFill("pink").command;
+      buttonShape.graphics.drawRect(0, 0, 150, 50);
+      buttonContainer.addChild(buttonShape, buttonText);
+
+      buttonContainer.on("click", (e) => {
+        addScore(calculateError(), "Sentences");
+        gameLevel = 1;
+        correctGuesses = 0;
+        incorrectGuesses = 0;
+        gameState = "LOADED";
+        runGameLoop();
+      });
+
+      stage.addChild(text, score, buttonContainer);
+    }
+    displayEndLevel() {
+      this.createBackground();
+      this.displayText();
     }
   }
 
@@ -416,6 +561,9 @@ const Sentences = () => {
       case "RUN_LEVEL":
         runLevelScreen();
         break;
+      case "RUN_END_LEVEL":
+        runEndLevelScreen();
+        break;
       default:
         console.log("default_ran");
     }
@@ -424,17 +572,21 @@ const Sentences = () => {
   // #################################### Util functions ############################################
 
   const fadeOutChildren = (time) => {
-    console.log(stage.children);
     stage.children.forEach((child) => {
       child.name !== "background" &&
         createjs.Tween.get(child).to({ alpha: 0 }, time);
     });
   };
-
+  const calculateError = () => {
+    return (correctGuesses / (correctGuesses + incorrectGuesses)) * 100;
+    
+  };
   const handleResize = (e) => {
     window.innerWidth < 900 ? (phone = true) : (phone = false);
     stage.removeAllEventListeners("click");
     stage.removeAllChildren();
+    currentBoxes = [];
+    currentWords = [];
     resizeCanvas();
     runGameLoop();
   };
@@ -496,4 +648,6 @@ const Sentences = () => {
   );
 };
 
-export default Sentences;
+export default connect(null, (dispatch) => ({
+  addScore: (score, gameName) => dispatch(addScores(score, gameName)),
+}))(Sentences);

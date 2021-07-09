@@ -306,23 +306,41 @@ const NounsGame = ({ addScore }) => {
       return;
     }
     if (!levelStatus) {
-      let randomItem =
-        gameData[selectedCategory][
-          Math.floor(Math.random() * gameData[selectedCategory].length)
-        ];
-      let filteredOptions = gameData[selectedCategory].filter(
-        (item) => item !== randomItem
-      );
-      let shuffled = shuffle(filteredOptions);
-      let sliced = shuffled.slice(0, 3);
-      sliced.push(randomItem);
-      let final = shuffle(sliced);
-      levelTarget = randomItem;
-      levelOptions = final;
-      levelStatus = true;
+      // let randomItem =
+      //   gameData[selectedCategory][
+      //     Math.floor(Math.random() * gameData[selectedCategory].length)
+      //   ];
+      // let filteredOptions = gameData[selectedCategory].filter(
+      //   (item) => item !== randomItem
+      // );
+      // let shuffled = shuffle(filteredOptions);
+      // let sliced = shuffled.slice(0, 3);
+      // sliced.push(randomItem);
+      // let final = shuffle(sliced);
+      // levelTarget = randomItem;
+      // levelOptions = final;
+      // levelStatus = true;
+      selectRandomWord();
     }
 
     new LevelScreen(stage, levelTarget, levelOptions).createLevel();
+  };
+
+  const selectRandomWord = () => {
+    let randomItem =
+      gameData[selectedCategory][
+        Math.floor(Math.random() * gameData[selectedCategory].length)
+      ];
+    let filteredOptions = gameData[selectedCategory].filter(
+      (item) => item !== randomItem
+    );
+    let shuffled = shuffle(filteredOptions);
+    let sliced = shuffled.slice(0, 3);
+    sliced.push(randomItem);
+    let final = shuffle(sliced);
+    levelTarget = randomItem;
+    levelOptions = final;
+    levelStatus = true;
   };
 
   const runEndLevel = () => {
@@ -551,7 +569,6 @@ const NounsGame = ({ addScore }) => {
               : this.stage.canvas.width * 0.75 - 100;
         }
         container.on("mouseover", (e) => {
-          console.log(e.currentTarget);
           e.currentTarget.children[0].scaleX = 1.1;
           e.currentTarget.children[0].scaleY = 1.1;
           e.currentTarget.x = e.currentTarget.x - 10;
