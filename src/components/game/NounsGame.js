@@ -1,6 +1,7 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { addScores } from "../../redux/API/API.actions";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import {
   calculateCategoryX,
   calculateCategoryY,
@@ -8,8 +9,7 @@ import {
   shuffle,
 } from "./util";
 
-const NounsGame = () => {
-  const dispatch = useDispatch();
+const NounsGame = ({ addScore }) => {
   const containerRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const createjs = window.createjs;
@@ -243,7 +243,7 @@ const NounsGame = () => {
   ];
 
   let loadingProgress;
-  let score = 18;
+  let score = 8;
   let wrong = 0;
   let timer = 0;
 
@@ -269,24 +269,18 @@ const NounsGame = () => {
       gameState = "OPTIONS";
       runGameLoop();
     });
-    window.addEventListener("resize", handleResize
-      // window.innerWidth < 900 ? (phone = true) : (phone = false);
-      // stage.removeAllEventListeners("click");
-      // stage.removeAllChildren();
-      // resizeCanvas();
-      // runGameLoop();
-    );
+    window.addEventListener("resize", handleResize);
     resizeCanvas();
     runGameLoop();
   };
 
   const handleResize = (e) => {
     window.innerWidth < 900 ? (phone = true) : (phone = false);
-      stage.removeAllEventListeners("click");
-      stage.removeAllChildren();
-      resizeCanvas();
-      runGameLoop();
-  }
+    stage.removeAllEventListeners("click");
+    stage.removeAllChildren();
+    resizeCanvas();
+    runGameLoop();
+  };
 
   // const showCurrentTimeOnScreen = () => {
   //   let time = parseInt(Math.floor(e.target.getTime() / 1000));
@@ -307,28 +301,46 @@ const NounsGame = () => {
   const runLevelScreen = () => {
     if (score >= 10) {
       gameState = "RUNENDLEVEL";
-      dispatch(addScores(calculateError(score, wrong), "Nouns"));
+      addScore(calculateError(score, wrong), "Nouns");
       runGameLoop();
       return;
     }
     if (!levelStatus) {
-      let randomItem =
-        gameData[selectedCategory][
-          Math.floor(Math.random() * gameData[selectedCategory].length)
-        ];
-      let filteredOptions = gameData[selectedCategory].filter(
-        (item) => item !== randomItem
-      );
-      let shuffled = shuffle(filteredOptions);
-      let sliced = shuffled.slice(0, 3);
-      sliced.push(randomItem);
-      let final = shuffle(sliced);
-      levelTarget = randomItem;
-      levelOptions = final;
-      levelStatus = true;
+      // let randomItem =
+      //   gameData[selectedCategory][
+      //     Math.floor(Math.random() * gameData[selectedCategory].length)
+      //   ];
+      // let filteredOptions = gameData[selectedCategory].filter(
+      //   (item) => item !== randomItem
+      // );
+      // let shuffled = shuffle(filteredOptions);
+      // let sliced = shuffled.slice(0, 3);
+      // sliced.push(randomItem);
+      // let final = shuffle(sliced);
+      // levelTarget = randomItem;
+      // levelOptions = final;
+      // levelStatus = true;
+      selectRandomWord();
     }
 
     new LevelScreen(stage, levelTarget, levelOptions).createLevel();
+  };
+
+  const selectRandomWord = () => {
+    let randomItem =
+      gameData[selectedCategory][
+        Math.floor(Math.random() * gameData[selectedCategory].length)
+      ];
+    let filteredOptions = gameData[selectedCategory].filter(
+      (item) => item !== randomItem
+    );
+    let shuffled = shuffle(filteredOptions);
+    let sliced = shuffled.slice(0, 3);
+    sliced.push(randomItem);
+    let final = shuffle(sliced);
+    levelTarget = randomItem;
+    levelOptions = final;
+    levelStatus = true;
   };
 
   const runEndLevel = () => {
@@ -427,7 +439,7 @@ const NounsGame = () => {
       this.stage = stage;
     }
     createCategories() {
-      score = 0;
+      score = 8;
       wrong = 0;
       for (let i = 0; i < categories.length; i++) {
         let container = new createjs.Container();
@@ -557,7 +569,6 @@ const NounsGame = () => {
               : this.stage.canvas.width * 0.75 - 100;
         }
         container.on("mouseover", (e) => {
-          console.log(e.currentTarget);
           e.currentTarget.children[0].scaleX = 1.1;
           e.currentTarget.children[0].scaleY = 1.1;
           e.currentTarget.x = e.currentTarget.x - 10;
@@ -728,8 +739,9 @@ const NounsGame = () => {
   React.useEffect(() => {
     init();
     return () => {
-      window.removeEventListener("resize", handleResize)
-    }
+      window.removeEventListener("resize", handleResize);
+      createjs.Sound.removeAllSounds();
+    };
   });
 
   return (
@@ -744,4 +756,6 @@ const NounsGame = () => {
   );
 };
 
-export default NounsGame;
+export default connect(null, (dispatch) => ({
+  addScore: (score, gameName) => dispatch(addScores(score, gameName)),
+}))(NounsGame);

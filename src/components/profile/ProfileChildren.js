@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
 import {
   Container,
   makeStyles,
   Typography,
   Grid,
   Button,
-  IconButton,
-  Icon,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -15,13 +13,9 @@ import {
   TextField,
   DialogActions,
 } from "@material-ui/core";
-import { capitalize } from "../utils/capitalize";
 import ChildCard from "./ChildCard";
-import AddIcon from "@material-ui/icons/Add";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import setCookie from "../utils/setCookie";
-import { useHistory } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import { addChild } from "../../redux/API/API.actions";
 
 const useStyles = makeStyles((theme) => {
@@ -51,14 +45,11 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const ProfileChildren = ({ children }) => {
+const ProfileChildren = ({ children, state, addChild }) => {
   const classes = useStyles();
   const [name, setName] = useState("");
   const [open, setOpen] = React.useState(false);
   const [error, setError] = useState("");
-  
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state);
 
   const handleClose = () => {
     setOpen(false);
@@ -68,9 +59,9 @@ const ProfileChildren = ({ children }) => {
 
   const handleSubmit = () => {
     if (name.length > 0 && !state.profile.children.includes(name)) {
-      dispatch(addChild(name));
+      addChild(name)
       setOpen(false);
-      setName("")
+      setName("");
     }
     if (state.profile.children.includes(name))
       setError("This child already exists");
@@ -82,7 +73,7 @@ const ProfileChildren = ({ children }) => {
   return (
     <Container>
       <Typography className={classes.header} align="center" variant="h3">
-        's Profile
+        {state.user.name}'s Profile
       </Typography>
       <Grid container spacing={3}>
         {children.map((child) => {
@@ -135,4 +126,13 @@ const ProfileChildren = ({ children }) => {
   );
 };
 
-export default ProfileChildren;
+export default connect(
+  (state) => {
+    return {
+      state: state,
+    };
+  },
+  (dispatch) => ({
+    addChild: (name) => dispatch(addChild(name))
+  })
+)(ProfileChildren);

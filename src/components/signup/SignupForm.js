@@ -2,26 +2,17 @@ import React, { useEffect, useState } from "react";
 import {
   Typography,
   Button,
-  ButtonGroup,
   Container,
   TextField,
-  Radio,
-  radioGroup,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
   CssBaseline,
   Grid,
 } from "@material-ui/core";
-import AcUnitOutlinedIcon from "@material-ui/icons/AcUnitOutlined";
-import ArrowForwardIosOutlinedIcon from "@material-ui/icons/ArrowForwardIosOutlined";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import { useHistory } from "react-router";
 import LockIcon from "@material-ui/icons/Lock";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import { signupUser, resetState } from "../../redux/signup/signup.actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,24 +35,22 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "15px",
   },
 }));
-const SignupForm = () => {
+const SignupForm = ({ state, signupUser, resetState }) => {
   const history = useHistory();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const state = useSelector((state) => state);
-  const dispatch = useDispatch();
   const classes = useStyles();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(signupUser(email, name, password));
+    signupUser(email, name, password);
     console.log();
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (state.signup.success === true) {
-      dispatch(resetState())
+      resetState();
       history.push("/login");
     }
   }, [state.signup]);
@@ -70,12 +59,12 @@ const SignupForm = () => {
     return <h1>LOADING SIGNUP</h1>;
   } else {
     return (
-      <Container>
+      <Container data-test="signupComponent">
         <CssBaseline />
         <div className={classes.form_container}>
           <LockIcon />
           <Typography variant="h3">Sign Up</Typography>
-          <form className={classes.form} noValidate>
+          <form data-test="signupForm" className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -138,4 +127,15 @@ const SignupForm = () => {
   }
 };
 
-export default SignupForm;
+export default connect(
+  (state) => {
+    return {
+      state: state,
+    };
+  },
+  (dispatch) => ({
+    signupUser: (email, name, password) =>
+      dispatch(signupUser(email, name, password)),
+    resetState: () => dispatch(resetState()),
+  })
+)(SignupForm);

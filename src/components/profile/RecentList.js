@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
+import { connect } from "react-redux";
 import {
   Paper,
   TableContainer,
@@ -8,13 +9,11 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Typography,
   TablePagination,
   TableFooter,
 } from "@material-ui/core";
 import moment from "moment";
-const RecentList = ({ child, game, data }) => {
-  const state = useSelector((state) => state);
+const RecentList = ({ child, game, data, state }) => {
   const [currentData, setCurrentData] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -39,7 +38,7 @@ const RecentList = ({ child, game, data }) => {
     setPage(0);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     extractRecentScores();
     console.log(currentData);
   }, [state, game, state.user.selectedChild]);
@@ -92,4 +91,8 @@ const RecentList = ({ child, game, data }) => {
   );
 };
 
-export default RecentList;
+export default connect((state) => {
+  return {
+    state: state,
+  };
+}, null)(RecentList);
