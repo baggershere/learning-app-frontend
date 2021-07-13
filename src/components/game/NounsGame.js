@@ -1,7 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addScores } from "../../redux/API/API.actions";
-import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
 import {
   calculateCategoryX,
   calculateCategoryY,
@@ -9,7 +8,8 @@ import {
   shuffle,
 } from "./util";
 
-const NounsGame = ({ addScore }) => {
+const NounsGame = () => {
+  const dispatch = useDispatch();
   const containerRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const createjs = window.createjs;
@@ -269,18 +269,24 @@ const NounsGame = ({ addScore }) => {
       gameState = "OPTIONS";
       runGameLoop();
     });
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize
+      // window.innerWidth < 900 ? (phone = true) : (phone = false);
+      // stage.removeAllEventListeners("click");
+      // stage.removeAllChildren();
+      // resizeCanvas();
+      // runGameLoop();
+    );
     resizeCanvas();
     runGameLoop();
   };
 
   const handleResize = (e) => {
     window.innerWidth < 900 ? (phone = true) : (phone = false);
-    stage.removeAllEventListeners("click");
-    stage.removeAllChildren();
-    resizeCanvas();
-    runGameLoop();
-  };
+      stage.removeAllEventListeners("click");
+      stage.removeAllChildren();
+      resizeCanvas();
+      runGameLoop();
+  }
 
   // const showCurrentTimeOnScreen = () => {
   //   let time = parseInt(Math.floor(e.target.getTime() / 1000));
@@ -301,46 +307,28 @@ const NounsGame = ({ addScore }) => {
   const runLevelScreen = () => {
     if (score >= 10) {
       gameState = "RUNENDLEVEL";
-      addScore(calculateError(score, wrong), "Nouns");
+      dispatch(addScores(calculateError(score, wrong), "Nouns"));
       runGameLoop();
       return;
     }
     if (!levelStatus) {
-      // let randomItem =
-      //   gameData[selectedCategory][
-      //     Math.floor(Math.random() * gameData[selectedCategory].length)
-      //   ];
-      // let filteredOptions = gameData[selectedCategory].filter(
-      //   (item) => item !== randomItem
-      // );
-      // let shuffled = shuffle(filteredOptions);
-      // let sliced = shuffled.slice(0, 3);
-      // sliced.push(randomItem);
-      // let final = shuffle(sliced);
-      // levelTarget = randomItem;
-      // levelOptions = final;
-      // levelStatus = true;
-      selectRandomWord();
+      let randomItem =
+        gameData[selectedCategory][
+          Math.floor(Math.random() * gameData[selectedCategory].length)
+        ];
+      let filteredOptions = gameData[selectedCategory].filter(
+        (item) => item !== randomItem
+      );
+      let shuffled = shuffle(filteredOptions);
+      let sliced = shuffled.slice(0, 3);
+      sliced.push(randomItem);
+      let final = shuffle(sliced);
+      levelTarget = randomItem;
+      levelOptions = final;
+      levelStatus = true;
     }
 
     new LevelScreen(stage, levelTarget, levelOptions).createLevel();
-  };
-
-  const selectRandomWord = () => {
-    let randomItem =
-      gameData[selectedCategory][
-        Math.floor(Math.random() * gameData[selectedCategory].length)
-      ];
-    let filteredOptions = gameData[selectedCategory].filter(
-      (item) => item !== randomItem
-    );
-    let shuffled = shuffle(filteredOptions);
-    let sliced = shuffled.slice(0, 3);
-    sliced.push(randomItem);
-    let final = shuffle(sliced);
-    levelTarget = randomItem;
-    levelOptions = final;
-    levelStatus = true;
   };
 
   const runEndLevel = () => {
@@ -569,6 +557,7 @@ const NounsGame = ({ addScore }) => {
               : this.stage.canvas.width * 0.75 - 100;
         }
         container.on("mouseover", (e) => {
+          console.log(e.currentTarget);
           e.currentTarget.children[0].scaleX = 1.1;
           e.currentTarget.children[0].scaleY = 1.1;
           e.currentTarget.x = e.currentTarget.x - 10;
@@ -739,8 +728,8 @@ const NounsGame = ({ addScore }) => {
   React.useEffect(() => {
     init();
     return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+      window.removeEventListener("resize", handleResize)
+    }
   });
 
   return (
@@ -755,6 +744,4 @@ const NounsGame = ({ addScore }) => {
   );
 };
 
-export default connect(null, (dispatch) => ({
-  addScore: (score, gameName) => dispatch(addScores(score, gameName)),
-}))(NounsGame);
+export default NounsGame;

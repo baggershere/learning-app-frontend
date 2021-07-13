@@ -4,22 +4,25 @@ import React from "react";
 import { useHistory } from "react-router";
 import Navbar from "../components/Navbar";
 import ProfileChildren from "../components/profile/ProfileChildren";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchProfileInfo } from "../redux/API/API.actions";
-import { connect } from "react-redux";
+import { resetSelectedChild } from "../redux/user/user.actions";
+import { SET_SELECTED_CHILD } from "../redux/user/user.types";
+import Footer from "../components/Footer";
 
 axios.defaults.withCredentials = true;
 
-const Profile = ({ fetchProfileInfo, state }) => {
+const Profile = () => {
   const history = useHistory();
-  //const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    console.log("ran");
     if (!state.user.isAuth) {
       history.push("/login");
     }
     if (state.user.isAuth) {
-      fetchProfileInfo();
+      dispatch(fetchProfileInfo());
     }
   }, []);
 
@@ -32,22 +35,14 @@ const Profile = ({ fetchProfileInfo, state }) => {
     );
   } else {
     return (
-      <React.Fragment>
+      <div style={{minHeight: "100vh", display:"grid",  gridTemplateRows: "auto 1fr auto"}}>
         <Navbar />
         <ProfileChildren children={state.profile.children} />
         <AnalyticsGrid />
-      </React.Fragment>
+        <Footer/>
+      </div>
     );
   }
 };
 
-export default connect(
-  (state) => {
-    return {
-      state: state,
-    };
-  },
-  (dispatch) => ({
-    fetchProfileInfo: () => dispatch(fetchProfileInfo()),
-  })
-)(Profile);
+export default Profile;

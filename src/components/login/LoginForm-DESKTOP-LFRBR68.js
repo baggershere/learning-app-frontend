@@ -14,6 +14,7 @@ import {
   CssBaseline,
   Grid,
 } from "@material-ui/core";
+import store from "../../redux/store";
 import AcUnitOutlinedIcon from "@material-ui/icons/AcUnitOutlined";
 import ArrowForwardIosOutlinedIcon from "@material-ui/icons/ArrowForwardIosOutlined";
 import { makeStyles } from "@material-ui/core";
@@ -21,8 +22,12 @@ import { useHistory } from "react-router";
 import LockIcon from "@material-ui/icons/Lock";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { signupUser, resetState } from "../../redux/signup/signup.actions";
+import Cookies from "universal-cookie";
+import setCookie from "../utils/setCookie";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
+import { login, resetSelectedChild } from "../../redux/user/user.actions";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   form_container: {
@@ -44,49 +49,39 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "15px",
   },
 }));
-const SignupForm = () => {
-  const history = useHistory();
-  const [name, setName] = useState("");
+
+const LoginForm = ({ state, login }) => {
+  const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const state = useSelector((state) => state);
-  const dispatch = useDispatch();
-  const classes = useStyles();
+  const [error, setError] = useState("");
+  const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(signupUser(email, name, password));
-    console.log();
+    login(email, password)
   };
-
-  useEffect(() => {
-    if (state.signup.success === true) {
-      dispatch(resetState())
-      history.push("/login");
+  React.useEffect(() => {
+    if (state.user.isAuth) {
+      history.push("/profile");
     }
-  }, [state.signup]);
+  }, [state]);
 
-  if (state.signup.loading) {
-    return <h1>LOADING SIGNUP</h1>;
+  if (state.user.loadingLogin) {
+    return <h1>LOGIN LOGIN</h1>;
   } else {
     return (
       <Container>
         <CssBaseline />
         <div className={classes.form_container}>
           <LockIcon />
-          <Typography variant="h3">Sign Up</Typography>
+          <Typography variant="h3">Login</Typography>
+          <Typography variant="h3">
+            {state.user.loading ? "LOADING" : ""}
+          </Typography>
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  onChange={(e) => setName(e.target.value)}
-                  label="Full Name"
-                  variant="outlined"
-                  fullWidth
-                  required
-                  autoFocus
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setEmail(e.target.value)}
@@ -94,6 +89,7 @@ const SignupForm = () => {
                   variant="outlined"
                   fullWidth
                   required
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
@@ -113,11 +109,11 @@ const SignupForm = () => {
                 color="error"
                 style={{ marginTop: "10px" }}
               >
-                {state.signup.error ? <p>{state.signup.error.message}</p> : ""}
+                {state.user.error && state.user.error}
               </Typography>
             </Container>
             <Button
-              onClick={handleSubmit}
+              onClick={(e) => handleSubmit(e)}
               className={classes.button}
               type="submit"
               fullWidth
@@ -128,7 +124,7 @@ const SignupForm = () => {
             </Button>
             <Grid container>
               <Grid className={classes.link} item xs={12}>
-                <Link to="/login">Already have an account? Login</Link>
+                <Link to="/signup">Don't have an account? Sign up here</Link>
               </Grid>
             </Grid>
           </form>
@@ -138,4 +134,6 @@ const SignupForm = () => {
   }
 };
 
-export default SignupForm;
+export default connect((state) => ({ state: state }), dispatch => ({
+  login: (email, password) => dispatch(login(email, password))
+}))(LoginForm);

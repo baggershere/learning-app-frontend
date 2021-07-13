@@ -17,7 +17,7 @@ export const fetchProfileInfo = () => async (dispatch, getState) => {
       "http://localhost:5000/api/fetchprofileinfo",
       { withCredentials: true }
     );
-    const selectedChild = getState().user.selectedChild;
+      const selectedChild = getState().user.selectedChild;
 
     if (!data.data.childrenArray.includes(selectedChild)) {
       const newSelectedChild =
@@ -59,11 +59,8 @@ export const removeChild = (name) => async (dispatch) => {
 };
 
 export const addScores = (score, game) => async (dispatch, getState) => {
-  
   const selectedChild = getState().user.selectedChild;
-  console.log(selectedChild)
   const email = getState().user.email;
-
   await axios.post(
     "http://localhost:5000/api/submitgamescore",
     {
@@ -75,5 +72,5 @@ export const addScores = (score, game) => async (dispatch, getState) => {
     { withCredentials: true }
   );
 
-  
+  console.log(selectedChild, score);
 };

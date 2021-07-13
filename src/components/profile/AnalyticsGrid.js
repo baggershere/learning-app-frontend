@@ -6,10 +6,9 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
-import { useDispatch, useSelector } from "../../redux/react-redux-hooks";
+import { useSelector } from "react-redux";
 import AverageScoresByGame from "./AverageScoresByGame";
 import RecentList from "./RecentList";
-import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -35,7 +34,8 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const AnalyticsGrid = ({state}) => {
+const AnalyticsGrid = () => {
+  const state = useSelector((state) => state);
   const [loading, setLoading] = useState(true);
   const [gameType, setGameType] = useState("");
   const classes = useStyles();
@@ -46,13 +46,13 @@ const AnalyticsGrid = ({state}) => {
     ];
     return gameNames;
   };
-  React.useEffect(() => {
+  useEffect(() => {
     setLoading(false);
     setGameType(getUniqueGameNames()[0]);
   }, [state.profile]);
 
   return (
-    <Container>
+    <Container style={{ padding: "30px 0px" }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Typography variant="h3" align="center">
@@ -100,4 +100,4 @@ const AnalyticsGrid = ({state}) => {
   );
 };
 
-export default connect(state => ({state:state}), null)(AnalyticsGrid);
+export default AnalyticsGrid;
