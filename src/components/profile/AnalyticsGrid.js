@@ -52,10 +52,10 @@ const AnalyticsGrid = ({state}) => {
   }, [state.profile]);
 
   return (
-    <Container style={{padding:"30px"}}>
+    <Container>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
-          <Typography variant="h3" align="center">
+          <Typography style={{padding: "20px 0px"}} variant="h3" align="center">
             Average scores for each game
           </Typography>
           <Grid container className={classes.buttonContainer}>

@@ -85,19 +85,18 @@ const ChildCard = ({
         </CardActionArea>
       </Card>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Title</DialogTitle>
+        <DialogTitle>Delete User</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
+            Are you sure you want to delete this user?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Disagree
+            No
           </Button>
           <Button onClick={handleSubmit} color="primary" autoFocus>
-            Agree
+            Yes
           </Button>
         </DialogActions>
       </Dialog>

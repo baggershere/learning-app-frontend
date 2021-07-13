@@ -12,7 +12,7 @@ import {
   TablePagination,
   TableFooter,
 } from "@material-ui/core";
-import moment from "moment";
+import {format} from "date-fns";
 const RecentList = ({ child, game, data, state }) => {
   const [currentData, setCurrentData] = useState([]);
   const [page, setPage] = React.useState(0);
@@ -59,15 +59,16 @@ const RecentList = ({ child, game, data, state }) => {
             {currentData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
+                
                 return (
                   <TableRow>
                     <TableCell>{row.game_name}</TableCell>
                     <TableCell>{row.game_score}</TableCell>
                     <TableCell>
-                      {moment(row.date_attempt).format("MM-DD-YYYY")}
+                      {format(new Date(row.date_attempt), "dd/MM/yyy")}
                     </TableCell>
                     <TableCell>
-                      {moment(row.date_attempt).format("HH:MM")}
+                      {format(new Date(row.date_attempt), "HH:mm")}
                     </TableCell>
                   </TableRow>
                 );

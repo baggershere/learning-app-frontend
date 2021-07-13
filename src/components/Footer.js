@@ -7,6 +7,7 @@ import {
   makeStyles,
   Button,
 } from "@material-ui/core";
+import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => {
   return {
@@ -24,8 +25,9 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Footer = () => {
+const Footer = ({state}) => {
   const classes = useStyles();
+  let language = state.user.language
   return (
     <footer className={classes.footer}>
       <Box>
@@ -35,7 +37,7 @@ const Footer = () => {
               <Box display="flex" justifyContent="center">
                 <Typography>
                   <Link to="/" className={classes.text}>
-                    Home
+                    {language === "English" ? "Home" : "主页"}
                   </Link>
                 </Typography>
               </Box>
@@ -65,4 +67,7 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default connect(
+  (state) => ({ state: state }),
+  null
+)(Footer);

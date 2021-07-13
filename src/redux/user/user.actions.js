@@ -9,6 +9,7 @@ import {
   RESET_USER_STATE,
   RESET_SELECTED_CHILD,
   SET_SELECTED_CHILD,
+  SWITCH_LANGUAGE
 } from "./user.types";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -56,4 +57,7 @@ export const resetSelectedChild = () => (dispatch, getState) => {
   });
 };
 
-
+export const switchLanguage = () => (dispatch, getState) => {
+  const newLanguage = getState().user.language === "English" ? "Chinese" : "English"
+  dispatch({ type: SWITCH_LANGUAGE, payload: newLanguage });
+};

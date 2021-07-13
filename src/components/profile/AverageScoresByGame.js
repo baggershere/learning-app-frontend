@@ -56,7 +56,7 @@ const AverageScoresByGame = ({ game, child, state }) => {
   }, [state, game, child]);
 
   return (
-    <Container>
+    <Container style={{padding: "40px 0px"}}>
       <Grid container>
         <Grid item xs={6}>
           <Typography variant="h3" align="center">

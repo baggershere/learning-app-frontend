@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 import {
   AppBar,
   Button,
   IconButton,
   makeStyles,
+  Switch,
   Toolbar,
   Typography,
 } from "@material-ui/core";
@@ -14,8 +15,9 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { Link, useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { resetUserState } from "../redux/user/user.actions";
+import { resetUserState, switchLanguage } from "../redux/user/user.actions";
 import { connect } from "react-redux";
+import { capitalize } from "./utils/capitalize";
 
 const useStyles = makeStyles(() => {
   return {
@@ -33,17 +35,21 @@ const useStyles = makeStyles(() => {
     },
   };
 });
-const Navbar = ({ state, resetUserState }) => {
+const Navbar = ({ state, resetUserState, switchLanguage }) => {
   const classes = useStyles();
   const [drawer, setDrawer] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
   const history = useHistory();
+  let language = state.user.language;
 
   const handleLogout = () => {
-    console.log("logout btn");
     resetUserState();
     removeCookie("authorization");
     history.push("/");
+  };
+
+  const handleChange = () => {
+    switchLanguage();
   };
 
   return (
@@ -51,17 +57,26 @@ const Navbar = ({ state, resetUserState }) => {
       <AppBar data-test="appbarComponent" position="static">
         <Toolbar>
           <IconButton>
-            <MenuIcon data-test="drawerButton" onClick={() => setDrawer(true)} />
+            <MenuIcon
+              data-test="drawerButton"
+              onClick={() => setDrawer(true)}
+            />
           </IconButton>
+
           <Typography
             data-test="navbarTitle"
             className={classes.title}
             variant="h6"
           >
-            Hi NAME HERE
+            {state.user.selectedChild.length
+              ? capitalize(state.user.selectedChild)
+              : null}
           </Typography>
+
           {state.user.isAuth ? (
-            <Button onClick={handleLogout}>Log out</Button>
+            <Button onClick={handleLogout}>
+              {language === "English" ? "Log out" : "你好"}
+            </Button>
           ) : null}
           {!state.user.isAuth ? (
             <Button onClick={() => history.push("/signup")}>Sign up</Button>
@@ -104,20 +119,29 @@ const Navbar = ({ state, resetUserState }) => {
               <Link to="/">Home</Link>
             </Button>
           </ListItem>
+          <ListItem style={{ display: "flex", justifyContent: "center" }}>
+            <Switch
+              onChange={handleChange}
+              color="primary"
+              inputProps={{ "aria-label": "checkbox with default color" }}
+            />
+            <Typography>{state.user.language}</Typography>
+          </ListItem>
         </List>
       </Drawer>
     </div>
   );
 };
 
-
 Navbar.propTypes = {
   state: PropTypes.object,
-  resetUserState: PropTypes.func
-}
-
+  resetUserState: PropTypes.func,
+};
 
 export default connect(
   (state) => ({ state: state }),
-  (dispatch) => ({ resetUserState: () => dispatch(resetUserState()) })
+  (dispatch) => ({
+    resetUserState: () => dispatch(resetUserState()),
+    switchLanguage: () => dispatch(switchLanguage()),
+  })
 )(Navbar);

@@ -1,10 +1,12 @@
 import React from "react";
 import { Container, Grid, Paper } from "@material-ui/core";
+import {connect} from "react-redux"
 import GameCard from "./GameCard";
-const DisplayGrid = () => {
-  const games = [
+const DisplayGrid = ({state}) => {
+  let language = state.user.language
+  let games = [
     {
-      name: "Nouns Game",
+      name: language === "English" ? "Nouns Game" : "Chinese",
       id:"nouns",
       details: "Game to improve your nouns. Many categories available",
       imageUrl:
@@ -39,4 +41,7 @@ const DisplayGrid = () => {
   );
 };
 
-export default DisplayGrid;
+export default connect(
+  (state) => ({ state: state }),
+  null
+)(DisplayGrid);

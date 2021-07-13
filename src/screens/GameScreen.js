@@ -8,13 +8,13 @@ import Footer from "../components/Footer";
 const GameScreen = () => {
   const { name } = useParams();
   return (
-    <React.Fragment>
+    <div>
       <Navbar />
       <Container style={{ paddingBottom: "20px" }}>
         <Game name={name} />
       </Container>
       <Footer />
-    </React.Fragment>
+    </div>
   );
 };
 

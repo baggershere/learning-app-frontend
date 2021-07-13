@@ -3,7 +3,7 @@ import GameList from "../components/homepage/GameList";
 import Footer from "../components/Footer";
 const Homepage = () => {
   return (
-    <div  style={{ display: "grid", gridTemplateRows: "auto 1fr auto", minHeight:"100vh"}}>
+    <div>
       <Navbar />
       <GameList />
       <Footer />

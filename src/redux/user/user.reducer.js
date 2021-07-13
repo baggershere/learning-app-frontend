@@ -9,6 +9,7 @@ import {
   RESET_USER_STATE,
   SET_SELECTED_CHILD,
   RESET_SELECTED_CHILD,
+  SWITCH_LANGUAGE
 } from "./user.types";
 
 const INITIAL_STATE = {
@@ -19,6 +20,7 @@ const INITIAL_STATE = {
   loading: true,
   isAuth: false,
   selectedChild: "",
+  language: "English"
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -93,6 +95,11 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         selectedChild: action.payload,
       };
+    case SWITCH_LANGUAGE:
+      return {
+        ...state,
+        language: action.payload
+      }
     default:
       return state;
   }
