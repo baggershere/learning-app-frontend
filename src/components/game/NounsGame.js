@@ -79,6 +79,11 @@ const NounsGame = ({ addScore }) => {
       src: "https://f000.backblazeb2.com/file/audio1262/flag_pics/germany_flag.png",
     },
     {
+      id: "home",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/n1612275.png",
+    },
+    {
       id: "Bat",
       type: createjs.Types.IMAGE,
       src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/bat.png",
@@ -243,9 +248,8 @@ const NounsGame = ({ addScore }) => {
   ];
 
   let loadingProgress;
-  let score = 8;
+  let score = 0;
   let wrong = 0;
-  let timer = 0;
 
   const init = () => {
     stage = new createjs.Stage(canvasRef.current);
@@ -295,7 +299,7 @@ const NounsGame = ({ addScore }) => {
   };
 
   const runOptionsScreen = () => {
-    new CategoriesScreen(stage).createCategories();
+    new CategoriesScreen(stage).createCategoriesScreen();
   };
   let levelStatus, levelTarget, levelOptions;
   const runLevelScreen = () => {
@@ -306,20 +310,6 @@ const NounsGame = ({ addScore }) => {
       return;
     }
     if (!levelStatus) {
-      // let randomItem =
-      //   gameData[selectedCategory][
-      //     Math.floor(Math.random() * gameData[selectedCategory].length)
-      //   ];
-      // let filteredOptions = gameData[selectedCategory].filter(
-      //   (item) => item !== randomItem
-      // );
-      // let shuffled = shuffle(filteredOptions);
-      // let sliced = shuffled.slice(0, 3);
-      // sliced.push(randomItem);
-      // let final = shuffle(sliced);
-      // levelTarget = randomItem;
-      // levelOptions = final;
-      // levelStatus = true;
       selectRandomWord();
     }
 
@@ -344,22 +334,66 @@ const NounsGame = ({ addScore }) => {
   };
 
   const runEndLevel = () => {
-    console.log("level complete");
+    let screen = new Screen();
+    screen.createBackground();
 
     let text = new createjs.Text(
-      calculateError(score, wrong),
-      "20px Open Sans",
+      "Score: " + Math.round(calculateError(score, wrong)) + "%",
+      "30px Open Sans",
       "black"
     );
-    let shape = new createjs.Shape();
-    shape.graphics.beginFill("red").drawRect(100, 50, 50, 50);
-    shape.on("click", (e) => {
+    text.x = stage.canvas.width / 2 - text.getMeasuredWidth() / 2;
+    text.y = stage.canvas.width * 0.2;
+
+    let container = new createjs.Container();
+    container.x = 15;
+    container.y = 15;
+    let image = new createjs.Bitmap(loader.getResult("home"));
+    image.scaleX = 50 / image.image.width;
+    image.scaleY = 50 / image.image.height;
+    container.addChild(image);
+    container.on("click", (e) => {
       score = 0;
-      wrong = 0;
+      levelStatus = false;
       gameState = "OPTIONS";
       runGameLoop();
     });
-    stage.addChild(text, shape);
+    let buttonContainer = new createjs.Container();
+    let buttonShape = new createjs.Shape();
+    let buttonText = new createjs.Text();
+
+    // Styling the text
+    buttonText.text = "Play again";
+    buttonText.font = "27px Open Sans";
+    buttonText.x = 200 / 2 - buttonText.getMeasuredWidth() / 2;
+    buttonText.y = 50 / 2 - buttonText.getMeasuredHeight() / 2;
+
+    // Styling the shape
+    buttonShape.color = buttonShape.graphics.beginFill("lightblue").command;
+    buttonShape.graphics.drawRect(0, 0, 200, 50);
+
+    // Positioning the container
+    buttonContainer.x = stage.canvas.width * 0.5 - 100;
+    buttonContainer.y = stage.canvas.height * 0.7;
+    //buttonContainer.alpha = 0;
+
+    //createjs.Tween.get(buttonContainer).to({ alpha: 1 }, 300);
+
+    buttonContainer.on("mouseover", (e) => {
+      e.currentTarget.children[0].color.style = "red";
+    });
+
+    buttonContainer.on("mouseout", (e) => {
+      e.currentTarget.children[0].color.style = "lightblue";
+    });
+    buttonContainer.on("click", (e) => {
+      score = 0;
+      levelStatus = false;
+      gameState = "OPTIONS";
+      runGameLoop();
+    });
+    buttonContainer.addChild(buttonShape, buttonText);
+    stage.addChild(container, buttonContainer, text);
   };
 
   const calculateError = (s, w) => {
@@ -396,21 +430,33 @@ const NounsGame = ({ addScore }) => {
     }
     createBackground() {
       let background = new createjs.Shape();
-      background.graphics
-        .beginFill(this.color)
-        .drawRect(0, 0, this.stage.canvas.width, this.stage.canvas.height);
       background.name = "background";
-      this.stage.addChild(background);
+      background.graphics
+        .beginLinearGradientFill(
+          ["#36d1dc ", "#5b86e5"],
+          [0, 0.5, 1],
+          0,
+          200,
+          0,
+          600
+        )
+        .drawRect(0, 0, stage.canvas.width, stage.canvas.height);
+      stage.addChild(background);
     }
     createHomeButton() {
-      let square = new createjs.Shape();
-      square.graphics.beginFill("red").drawRect(10, 10, 50, 50);
-      square.on("click", (e) => {
+      let container = new createjs.Container();
+      container.x = 15;
+      container.y = 15;
+      let image = new createjs.Bitmap(loader.getResult("home"));
+      image.scaleX = 50 / image.image.width;
+      image.scaleY = 50 / image.image.height;
+      container.addChild(image);
+      container.on("click", (e) => {
         levelStatus = false;
         gameState = "OPTIONS";
         runGameLoop();
       });
-      this.stage.addChild(square);
+      this.stage.addChild(container);
     }
   }
 
@@ -420,12 +466,37 @@ const NounsGame = ({ addScore }) => {
       this.percentLoaded = percentLoaded;
     }
     createLoadingStatusText() {
+      let progressContainer = new createjs.Container();
+      progressContainer.x = stage.canvas.width / 2 - (25 * 10.5) / 2 - 15;
+      progressContainer.y = stage.canvas.height / 2 - 30 / 2;
+      let progressBox = new createjs.Shape();
+      progressBox.graphics.beginFill("");
+      progressBox.graphics.setStrokeStyle(5).beginStroke("black");
+      progressBox.graphics.drawRect(20, 0, 25 * 10.5, 30);
+
+      progressContainer.addChild(progressBox);
+      let progressStage = Math.floor(this.percentLoaded / 10);
+      for (let i = 1; i <= progressStage; i++) {
+        let block = new createjs.Shape();
+        block.graphics.beginFill("black").drawRect(i * 25, 5, 20, 20);
+        progressContainer.addChild(block);
+      }
+
       let text = new createjs.Text(
         `${this.percentLoaded}%`,
         "50px Open Sans",
         "black"
       );
-      this.stage.addChild(text);
+      text.x = stage.canvas.width / 2 - text.getMeasuredWidth() / 2;
+      text.y = stage.canvas.height * 0.55;
+
+      const messageText = new createjs.Text();
+      messageText.text = "Loading / 加载中";
+      messageText.font = "25px Open Sans";
+      messageText.x =
+        stage.canvas.width / 2 - messageText.getMeasuredWidth() / 2;
+      messageText.y = stage.canvas.height * 0.4;
+      this.stage.addChild(text, messageText, progressContainer);
     }
     createLoadingScreen() {
       this.createBackground();
@@ -439,23 +510,25 @@ const NounsGame = ({ addScore }) => {
       this.stage = stage;
     }
     createCategories() {
-      score = 8;
+      score = 0;
       wrong = 0;
       for (let i = 0; i < categories.length; i++) {
         let container = new createjs.Container();
         container.name = categories[i];
         let shape = new createjs.Shape();
+        shape.graphics.setStrokeStyle(5).beginStroke("black");
         shape.graphics.beginFill("white").drawRect(0, 0, 150, 150);
         let bitmap = new createjs.Bitmap(
           loader.getResult(categories[i] + "Cat")
         );
         let text = new createjs.Text(categories[i], "20px Open Sans", "black");
+        text.x = 150 / 2 - text.getMeasuredWidth() / 2;
+        text.y = 10;
         let imgWidth = bitmap.image.width;
-        let scale = 100 / imgWidth;
-        bitmap.scaleX = scale - 0.1;
-        bitmap.scaleY = scale - 0.1;
-        bitmap.x = 75 - 50;
-        bitmap.y = 75 - 50;
+        bitmap.scaleX = 100 / bitmap.image.width;
+        bitmap.scaleY = 100 / bitmap.image.height;
+        bitmap.x = 150 / 2 - 50;
+        bitmap.y = 75 - 40;
         container.y =
           calculateCategoryY(this.stage.canvas.height, i + 1) - 150 / 2;
         container.x =
@@ -485,6 +558,10 @@ const NounsGame = ({ addScore }) => {
         this.stage.addChild(container);
       }
     }
+    createCategoriesScreen() {
+      this.createBackground();
+      this.createCategories();
+    }
   }
 
   class LevelScreen extends Screen {
@@ -505,7 +582,7 @@ const NounsGame = ({ addScore }) => {
       let text = new createjs.Text(score + "/10", "20px Open Sans", "black");
       text.set({
         x: 100,
-        y: 0,
+        y: 10,
       });
       this.stage.addChild(text);
     }
@@ -513,6 +590,7 @@ const NounsGame = ({ addScore }) => {
       let container = new createjs.Container();
       container.name = this.targetItem;
       let shape = new createjs.Shape();
+      shape.graphics.setStrokeStyle(5).beginStroke("black");
       let text = new createjs.Text(
         this.targetItem,
         "25px Open Sans",
@@ -525,6 +603,9 @@ const NounsGame = ({ addScore }) => {
         .drawRect(0, 0, this.stage.canvas.width * 0.6, 50);
       container.addChild(shape, text);
       this.stage.addChild(container);
+      text.x =
+        (this.stage.canvas.width * 0.6) / 2 - text.getMeasuredWidth() / 2;
+      text.y = 50 / 2 - text.getMeasuredHeight() / 2;
     }
     createChoices() {
       createjs.Sound.play(this.targetItem + "mp3");
@@ -533,57 +614,45 @@ const NounsGame = ({ addScore }) => {
         container.name = this.itemOptions[i];
         let shape = new createjs.Shape();
         shape.color = shape.graphics.beginFill("white").command;
-        shape.graphics.drawRect(0, 0, 200, 200);
-        let text = new createjs.Text(
-          this.itemOptions[i],
-          "20px Open Sans",
-          "black"
-        );
+        shape.graphics.drawRect(0, 0, 100, 100);
         let bitmap = new createjs.Bitmap(loader.getResult(this.itemOptions[i]));
-        let bitmapRatio =
-          bitmap.image.height < bitmap.image.width
-            ? 100 / bitmap.image.width
-            : 100 / bitmap.image.height;
-        bitmap.scaleX = bitmapRatio - 0.1;
-        bitmap.scaleY = bitmapRatio - 0.1;
-        bitmap.x = 100 - 50;
-        bitmap.y = 100 - 50;
+        bitmap.scaleX = 150 / bitmap.image.width;
+        bitmap.scaleY = 100 / bitmap.image.height;
 
         if (phone) {
           container.y =
             i === 0 || i === 1
-              ? this.stage.canvas.height * 0.33 - 100
-              : this.stage.canvas.height * 0.66 - 100;
+              ? this.stage.canvas.height * 0.33 - 50
+              : this.stage.canvas.height * 0.66 - 50;
           container.x =
             i === 0 || i === 2
-              ? this.stage.canvas.width * 0.25 - 100
-              : this.stage.canvas.width * 0.75 - 100;
+              ? this.stage.canvas.width * 0.25 - 75
+              : this.stage.canvas.width * 0.75 - 75;
         } else {
           container.y =
             i === 0 || i === 1
-              ? this.stage.canvas.height * 0.4 - 100
-              : this.stage.canvas.height * 0.8 - 100;
+              ? this.stage.canvas.height * 0.4 - 50
+              : this.stage.canvas.height * 0.8 - 50;
           container.x =
             i === 0 || i === 2
-              ? this.stage.canvas.width * 0.25 - 100
-              : this.stage.canvas.width * 0.75 - 100;
+              ? this.stage.canvas.width * 0.25 - 75
+              : this.stage.canvas.width * 0.75 - 75;
         }
         container.on("mouseover", (e) => {
-          e.currentTarget.children[0].scaleX = 1.1;
-          e.currentTarget.children[0].scaleY = 1.1;
-          e.currentTarget.x = e.currentTarget.x - 10;
-          e.currentTarget.y = e.currentTarget.y - 10;
-          e.currentTarget.children[1].scaleX = bitmapRatio;
-          e.currentTarget.children[1].scaleY = bitmapRatio;
+          // e.currentTarget.children[0].scaleX = 1.1;
+          // e.currentTarget.children[0].scaleY = 1.1;
+          // e.currentTarget.x = e.currentTarget.x - 10;
+          // e.currentTarget.y = e.currentTarget.y - 10;
+          // e.currentTarget.children[1].scaleX = bitmapRatio;
+          // e.currentTarget.children[1].scaleY = bitmapRatio;
         });
         container.on("mouseout", (e) => {
-          console.log(e.currentTarget);
-          e.currentTarget.children[0].scaleX = 1;
-          e.currentTarget.children[0].scaleY = 1;
-          e.currentTarget.x = e.currentTarget.x + 10;
-          e.currentTarget.y = e.currentTarget.y + 10;
-          e.currentTarget.children[1].scaleX = bitmapRatio - 0.1;
-          e.currentTarget.children[1].scaleY = bitmapRatio - 0.1;
+          // e.currentTarget.children[0].scaleX = 1;
+          // e.currentTarget.children[0].scaleY = 1;
+          // e.currentTarget.x = e.currentTarget.x + 10;
+          // e.currentTarget.y = e.currentTarget.y + 10;
+          // e.currentTarget.children[1].scaleX = bitmapRatio - 0.1;
+          // e.currentTarget.children[1].scaleY = bitmapRatio - 0.1;
         });
         container.on("click", (e) => {
           if (e.currentTarget.name === this.targetItem) {
@@ -591,16 +660,27 @@ const NounsGame = ({ addScore }) => {
             createjs.Sound.play(e.currentTarget.name + "mp3");
             createjs.Tween.get(e.currentTarget).to(
               {
-                scaleX: 1,
-                scaleY: 1,
-                x: stage.canvas.width / 2 - 110,
-                y: stage.canvas.height / 2 - 100,
+                // scaleX: 1,
+                // scaleY: 1,
+                x: stage.canvas.width / 2 - 75,
+                y: stage.canvas.height / 2 - 50,
               },
               200
             );
-            stage.children.forEach((child) =>
-              child.name !== e.currentTarget.name ? (child.alpha = 0) : null
-            );
+            // stage.children.forEach((child) => {
+            //   if (child.name !== e.currentTarget.name) {
+            //     child.alpha = 0;
+            //   }
+            // });
+            for (let i = stage.numChildren - 1; i >= 0; i--) {
+              let child = stage.getChildAt(i);
+              if (
+                child.name !== e.currentTarget.name &&
+                child.name !== "background"
+              ) {
+                stage.removeChild(child);
+              }
+            }
             container.removeAllEventListeners();
             new Buttons(
               "Continue",
@@ -615,7 +695,7 @@ const NounsGame = ({ addScore }) => {
           levelStatus = false;
         });
 
-        container.addChild(shape, bitmap);
+        container.addChild(bitmap);
         this.stage.addChild(container);
       }
     }
@@ -631,7 +711,6 @@ const NounsGame = ({ addScore }) => {
       this.fontSize = fontSize;
     }
     createPlayButton() {
-      console.log("ran", this.text);
       let container = new createjs.Container();
       let shape = new createjs.Shape();
       let text = new createjs.Text(this.text, `50px Open Sans`, this.textColor);
@@ -661,7 +740,6 @@ const NounsGame = ({ addScore }) => {
       this.stage.addChild(container);
     }
     createNextLevelButton() {
-      console.log(this.text);
       const container = generateButtonContainer(
         this.text,
         this.shapeColor,
@@ -683,14 +761,16 @@ const NounsGame = ({ addScore }) => {
   }
 
   const generateButtonContainer = (textContent, shapeColor, textColor) => {
-    console.log(textContent);
     const container = new createjs.Container();
     const shape = new createjs.Shape();
     const text = new createjs.Text(textContent, "20px Open Sans", "black");
-    shape.color = shape.graphics.beginFill("lightgrey").command;
+    text.x = 200 / 2 - text.getMeasuredWidth() / 2;
+    text.y = 50 / 2 - text.getMeasuredHeight() / 2;
+    shape.color = shape.graphics.beginFill("lightgreen").command;
     shape.graphics.drawRect(0, 0, 200, 50);
+
     container.x = stage.canvas.width / 2 - 100;
-    container.y = phone ? 200 : 107.5;
+    container.y = phone ? 200 : 130;
     container.alpha = 0;
     createjs.Tween.get(container).to({ alpha: 1 }, 500);
     container.addChild(shape, text);

@@ -50,6 +50,7 @@ const ProfileChildren = ({ children, state, addChild }) => {
   const [name, setName] = useState("");
   const [open, setOpen] = React.useState(false);
   const [error, setError] = useState("");
+  let language = state.user.language;
 
   const handleClose = () => {
     setOpen(false);
@@ -59,7 +60,7 @@ const ProfileChildren = ({ children, state, addChild }) => {
 
   const handleSubmit = () => {
     if (name.length > 0 && !state.profile.children.includes(name)) {
-      addChild(name)
+      addChild(name);
       setOpen(false);
       setName("");
     }
@@ -73,7 +74,7 @@ const ProfileChildren = ({ children, state, addChild }) => {
   return (
     <Container>
       <Typography className={classes.header} align="center" variant="h3">
-        {state.user.name}'s Profile
+        {state.user.name}'s {language === "English" ? "Profile" : "用户"}
       </Typography>
       <Grid container spacing={3}>
         {children.map((child) => {
@@ -92,22 +93,27 @@ const ProfileChildren = ({ children, state, addChild }) => {
           color="primary"
           endIcon={<AddCircleIcon>send</AddCircleIcon>}
         >
-          Add child
+          {" "}
+          {language === "English" ? "Add child" : "增加使用者"}
         </Button>
       </Container>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          {language === "English"
+            ? "Write the name of the child you want to add"
+            : "你要添加的孩子的名字"}
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          {/* <DialogContentText>
             To subscribe to this website, please enter your email address here.
             We will send updates occasionally.
-          </DialogContentText>
+          </DialogContentText> */}
           <TextField
             onChange={(e) => setName(e.target.value)}
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
+            label={language === "English" ? "Name" : "名字"}
             type="email"
             fullWidth
           />
@@ -115,10 +121,10 @@ const ProfileChildren = ({ children, state, addChild }) => {
         <Typography>{error.length ? error : ""}</Typography>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+          {language === "English" ? "Cancel" : "否"}
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            Subscribe
+          {language === "English" ? "Continue" : "确定"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -133,6 +139,6 @@ export default connect(
     };
   },
   (dispatch) => ({
-    addChild: (name) => dispatch(addChild(name))
+    addChild: (name) => dispatch(addChild(name)),
   })
 )(ProfileChildren);

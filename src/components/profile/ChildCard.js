@@ -45,6 +45,7 @@ const ChildCard = ({
 }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  let language = state.user.language;
 
   const handleOpen = (e) => {
     e.stopPropagation();
@@ -80,23 +81,29 @@ const ChildCard = ({
             <Typography align="center" variant="h4">
               {capitalize(name)}
             </Typography>
-            <Button onClick={handleOpen}>Delete</Button>
+            <Button onClick={handleOpen}>
+              {language === "English" ? "Delete" : "删除"}
+            </Button>
           </CardContent>
         </CardActionArea>
       </Card>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Delete User</DialogTitle>
+        <DialogTitle>
+          {language === "English" ? "Delete User" : "删除用户"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this user?
+            {language === "English"
+              ? "Are you sure you want to delete this user?"
+              : "你确定要删除用户吗？"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            No
+            {language === "English" ? "No" : "否"}
           </Button>
           <Button onClick={handleSubmit} color="primary" autoFocus>
-            Yes
+            {language === "English" ? "Yes" : "确定"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -113,7 +120,7 @@ export default connect(
   (dispatch) => ({
     setSelectedChild: (name) =>
       dispatch({ type: SET_SELECTED_CHILD, payload: name }),
-      resetSelectedChild: () => dispatch(resetSelectedChild()),
-  removeChild: (name) => dispatch(removeChild(name))
+    resetSelectedChild: () => dispatch(resetSelectedChild()),
+    removeChild: (name) => dispatch(removeChild(name)),
   })
 )(ChildCard);

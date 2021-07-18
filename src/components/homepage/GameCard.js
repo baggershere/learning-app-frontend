@@ -8,6 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   media: {
@@ -15,9 +16,10 @@ const useStyles = makeStyles({
   },
 });
 
-const GameCard = ({ name, details, imageUrl, link }) => {
+const GameCard = ({ state, name, details, imageUrl, link }) => {
   const classes = useStyles();
   const history = useHistory();
+  let language = state.user.language;
   return (
     <Card>
       <CardActionArea onClick={() => history.push("/game/" + link)}>
@@ -33,11 +35,11 @@ const GameCard = ({ name, details, imageUrl, link }) => {
       </CardActionArea>
       <CardActions>
         <Button size="large" color="error">
-          Play
+          {language === "English" ? "Play" : "玩一下"}
         </Button>
       </CardActions>
     </Card>
   );
 };
 
-export default GameCard;
+export default connect((state) => ({ state: state }), null)(GameCard);

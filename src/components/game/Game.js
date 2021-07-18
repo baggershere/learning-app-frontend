@@ -5,6 +5,7 @@ import { capitalize } from "@material-ui/core";
 import "./gameStyles.css";
 import Sentences from "./Sentences";
 import Spelling from "./Spelling";
+import Questions from "./Questions";
 
 const useStyles = makeStyles({
   flexbox: {
@@ -29,7 +30,9 @@ const Game = ({ name }) => {
           <Sentences />
         ) : name === "spelling" ? (
           <Spelling />
-        ) : (
+        ) : name === "questions" ? (
+          <Questions />
+        ) :(
           <Typography align="center">
             Sorry, there is no game available under this name!
           </Typography>

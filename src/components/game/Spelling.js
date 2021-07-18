@@ -126,20 +126,48 @@ const Spelling = ({addScore}) => {
       let background = new createjs.Shape();
       background.name = "background";
       background.graphics
-        .beginFill("lightgreen")
+      .beginLinearGradientFill(["#36d1dc ","#5b86e5"], [0, .5, 1], 0, 200, 0, 600)
         .drawRect(0, 0, stage.canvas.width, stage.canvas.height);
       stage.addChild(background);
     }
   }
 
   class LoadingScreen extends Screen {
-    showPercentLoaded() {
-      let text = new createjs.Text(`${percentLoaded}`, "20px Open Sans");
-      stage.addChild(text);
+    createLoadingStatusText() {
+      let progressContainer = new createjs.Container();
+      progressContainer.x = stage.canvas.width / 2 - (25 * 10.5) / 2 - 15;
+      progressContainer.y = stage.canvas.height / 2 - 30 / 2;
+      let progressBox = new createjs.Shape();
+      progressBox.graphics.beginFill("");
+      progressBox.graphics.setStrokeStyle(5).beginStroke("black");
+      progressBox.graphics.drawRect(20, 0, 25 * 10.5, 30);
+
+      progressContainer.addChild(progressBox);
+      let progressStage = Math.floor(percentLoaded / 10);
+      for (let i = 1; i <= progressStage; i++) {
+        let block = new createjs.Shape();
+        block.graphics.beginFill("black").drawRect(i * 25, 5, 20, 20);
+        progressContainer.addChild(block);
+      }
+
+      let text = new createjs.Text(
+        `${percentLoaded}%`,
+        "50px Open Sans",
+        "black"
+      );
+      text.x = stage.canvas.width / 2 - text.getMeasuredWidth() / 2;
+      text.y = stage.canvas.height * 0.55;
+
+      const messageText = new createjs.Text();
+      messageText.text = "Loading / 加载中";
+      messageText.font = "25px Open Sans";
+      messageText.x = stage.canvas.width / 2 - messageText.getMeasuredWidth() / 2;
+      messageText.y = stage.canvas.height * 0.4
+      stage.addChild(text, messageText,progressContainer);
     }
     runLoadingScreen() {
       this.createBackground();
-      this.showPercentLoaded();
+      this.createLoadingStatusText();
     }
   }
   class CategoriesScreen extends Screen {
@@ -315,7 +343,6 @@ const Spelling = ({addScore}) => {
       iconShape.graphics.beginFill("lightblue").drawRect(0, 0, 65, 65);
 
       const image = new createjs.Bitmap(loader.getResult("audioIcon"));
-      console.log(image)
       image.scaleX = 50 / image.image.width;
       image.scaleY = 50 / image.image.height;
       image.x = 65 / 2 - 25;

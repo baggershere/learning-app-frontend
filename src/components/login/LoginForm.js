@@ -57,10 +57,11 @@ const LoginForm = ({ state, login }) => {
   const [error, setError] = useState("");
   const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
   const history = useHistory();
+  let language = state.user.language;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(email, password)
+    login(email, password);
   };
   React.useEffect(() => {
     if (state.user.isAuth) {
@@ -76,7 +77,9 @@ const LoginForm = ({ state, login }) => {
         <CssBaseline />
         <div className={classes.form_container}>
           <LockIcon />
-          <Typography variant="h3">Login</Typography>
+          <Typography variant="h3">
+            {language === "English" ? "Login" : "登录"}
+          </Typography>
           <Typography variant="h3">
             {state.user.loading ? "LOADING" : ""}
           </Typography>
@@ -85,7 +88,7 @@ const LoginForm = ({ state, login }) => {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setEmail(e.target.value)}
-                  label="Email"
+                  label={state.user.language === "English" ? "Email" : "登录"}
                   variant="outlined"
                   fullWidth
                   required
@@ -95,7 +98,9 @@ const LoginForm = ({ state, login }) => {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setPassword(e.target.value)}
-                  label="Password"
+                  label={
+                    state.user.language === "English" ? "Password" : "密码"
+                  }
                   variant="outlined"
                   fullWidth
                   required
@@ -120,11 +125,15 @@ const LoginForm = ({ state, login }) => {
               variant="contained"
               color="primary"
             >
-              Sign Up
+              {language === "English" ? "Log in" : "登录"}
             </Button>
             <Grid container>
               <Grid className={classes.link} item xs={12}>
-                <Link to="/signup">Don't have an account? Sign up here</Link>
+                <Link to="/signup">
+                  {language === "English"
+                    ? "Don't have an account? Sign up here"
+                    : "没有账户？请在这里注册"}
+                </Link>
               </Grid>
             </Grid>
           </form>
@@ -134,6 +143,9 @@ const LoginForm = ({ state, login }) => {
   }
 };
 
-export default connect((state) => ({ state: state }), dispatch => ({
-  login: (email, password) => dispatch(login(email, password))
-}))(LoginForm);
+export default connect(
+  (state) => ({ state: state }),
+  (dispatch) => ({
+    login: (email, password) => dispatch(login(email, password)),
+  })
+)(LoginForm);

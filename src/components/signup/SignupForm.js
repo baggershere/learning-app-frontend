@@ -41,6 +41,7 @@ const SignupForm = ({ state, signupUser, resetState }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const classes = useStyles();
+  let language = state.user.language;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,13 +64,15 @@ const SignupForm = ({ state, signupUser, resetState }) => {
         <CssBaseline />
         <div className={classes.form_container}>
           <LockIcon />
-          <Typography variant="h3">Sign Up</Typography>
+          <Typography variant="h3">
+            {language === "English" ? "Sign Up" : "注册"}
+          </Typography>
           <form data-test="signupForm" className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setName(e.target.value)}
-                  label="Full Name"
+                  label={language === "English" ? "Full Name" : "姓名"}
                   variant="outlined"
                   fullWidth
                   required
@@ -79,7 +82,7 @@ const SignupForm = ({ state, signupUser, resetState }) => {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setEmail(e.target.value)}
-                  label="Email"
+                  label={language === "English" ? "Email" : "电子邮箱"}
                   variant="outlined"
                   fullWidth
                   required
@@ -88,7 +91,7 @@ const SignupForm = ({ state, signupUser, resetState }) => {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setPassword(e.target.value)}
-                  label="Password"
+                  label={language === "English" ? "Password" : "密码"}
                   variant="outlined"
                   fullWidth
                   required
@@ -113,11 +116,15 @@ const SignupForm = ({ state, signupUser, resetState }) => {
               variant="contained"
               color="primary"
             >
-              Sign Up
+              {language === "English" ? "Sign up" : "注册"}
             </Button>
             <Grid container>
               <Grid className={classes.link} item xs={12}>
-                <Link to="/login">Already have an account? Login</Link>
+                <Link to="/login">
+                  {language === "English"
+                    ? "Already have an account? Login"
+                    : "没有账户？请在这里注册"}{" "}
+                </Link>
               </Grid>
             </Grid>
           </form>

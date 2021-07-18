@@ -9,7 +9,7 @@ import {
   REQUEST_PROFILE_API_FAIL,
   REQUEST_PROFILE_API_SUCCESS,
 } from "./API.types";
-import moment from 'moment'
+import moment from "moment";
 
 export const fetchProfileInfo = () => async (dispatch, getState) => {
   try {
@@ -60,9 +60,9 @@ export const removeChild = (name) => async (dispatch) => {
 };
 
 export const addScores = (score, game) => async (dispatch, getState) => {
-  
   const selectedChild = getState().user.selectedChild;
   const email = getState().user.email;
+  console.log(score, game, selectedChild, email);
 
   await axios.post(
     "http://localhost:5000/api/submitgamescore",
@@ -71,7 +71,7 @@ export const addScores = (score, game) => async (dispatch, getState) => {
       gameName: game,
       gameScore: Math.round(score),
       email: email,
-      time: moment().format('YYYY-MM-DD HH:mm:ss') 
+      time: moment().format("YYYY-MM-DD HH:mm:ss"),
     },
     { withCredentials: true }
   );

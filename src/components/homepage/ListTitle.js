@@ -14,7 +14,7 @@ const ListTitle = ({ state }) => {
   return (
     <Container>
       <Typography className={classes.title} variant="h3" align="center">
-        {language === "English" ? "Learning Activities" : "Chinese"}
+        {language === "English" ? "Learning Activities" : "来做个游戏吧！"}
       </Typography>
     </Container>
   );

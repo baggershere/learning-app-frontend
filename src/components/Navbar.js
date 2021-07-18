@@ -33,6 +33,9 @@ const useStyles = makeStyles(() => {
       fontSize: "25px",
       textTransform: "none",
     },
+    link: {
+      textDecoration: "none",
+    },
   };
 });
 const Navbar = ({ state, resetUserState, switchLanguage }) => {
@@ -75,14 +78,18 @@ const Navbar = ({ state, resetUserState, switchLanguage }) => {
 
           {state.user.isAuth ? (
             <Button onClick={handleLogout}>
-              {language === "English" ? "Log out" : "你好"}
+              {language === "English" ? "Log out" : "登出"}
             </Button>
           ) : null}
           {!state.user.isAuth ? (
-            <Button onClick={() => history.push("/signup")}>Sign up</Button>
+            <Button onClick={() => history.push("/signup")}>
+              {language === "English" ? "Sign up" : "注册"}
+            </Button>
           ) : null}
           {!state.user.isAuth ? (
-            <Button onClick={() => history.push("/login")}>Sign in</Button>
+            <Button onClick={() => history.push("/login")}>
+              {language === "English" ? "Login" : "登录"}
+            </Button>
           ) : null}
         </Toolbar>
       </AppBar>
@@ -96,27 +103,28 @@ const Navbar = ({ state, resetUserState, switchLanguage }) => {
         <List data-test="drawerItems" className={classes.list}>
           <ListItem>
             <Typography align="justify" variant="h4">
-              Hello
+              {language === "English" ? "Hello" : "哈罗"}
             </Typography>
           </ListItem>
           <ListItem>
             <Button className={classes.button} fullWidth>
-              <Link to="/">Home</Link>
+              <Link className={classes.link} to="/">
+                {language === "English" ? "Home" : "首页"}
+              </Link>
             </Button>
           </ListItem>
           <ListItem>
             <Button className={classes.button} fullWidth>
-              <Link to="/login">Login</Link>
+              <Link className={classes.link} to="/login">
+                {language === "English" ? "Login" : "登录"}
+              </Link>
             </Button>
           </ListItem>
           <ListItem>
             <Button className={classes.button} fullWidth>
-              <Link to="/profile">Profile</Link>
-            </Button>
-          </ListItem>
-          <ListItem>
-            <Button className={classes.button} fullWidth>
-              <Link to="/">Home</Link>
+              <Link className={classes.link} to="/profile">
+                {language === "English" ? "Profile" : "用户"}
+              </Link>
             </Button>
           </ListItem>
           <ListItem style={{ display: "flex", justifyContent: "center" }}>

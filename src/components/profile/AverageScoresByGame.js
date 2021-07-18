@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -23,6 +23,7 @@ const AverageScoresByGame = ({ game, child, state }) => {
   const classes = useStyles();
   const [currentStudentData, setCurrentStudentData] = useState("");
   const [currentAverageData, setCurrentAverageData] = useState("");
+  let language = state.user.language;
 
   const extractStudentScores = () => {
     const scores = state.profile.averageScoresByGame;
@@ -56,11 +57,11 @@ const AverageScoresByGame = ({ game, child, state }) => {
   }, [state, game, child]);
 
   return (
-    <Container style={{padding: "40px 0px"}}>
+    <Container style={{ padding: "40px 0px" }}>
       <Grid container>
         <Grid item xs={6}>
           <Typography variant="h3" align="center">
-            Your score
+            {language === "English" ? "Your score" : "你的成绩"}
           </Typography>
           <Typography variant="h3" align="center">
             {currentStudentData}%
@@ -68,7 +69,7 @@ const AverageScoresByGame = ({ game, child, state }) => {
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h3" align="center">
-            Student average
+          {language === "English" ? "Student average" : "学生们的平均成绩"}
           </Typography>
           <Typography variant="h3" align="center">
             {currentAverageData}%
@@ -79,6 +80,10 @@ const AverageScoresByGame = ({ game, child, state }) => {
   );
 };
 
-export default connect(state => ({
-  state: state
-}), null)(AverageScoresByGame);
+// 最近成绩 - recent scores
+export default connect(
+  (state) => ({
+    state: state,
+  }),
+  null
+)(AverageScoresByGame);

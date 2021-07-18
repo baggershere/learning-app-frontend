@@ -37,7 +37,7 @@ export const setUserState = (jwt) => async (dispatch) => {
     const resp = await axios.post("http://localhost:5000/api/fetchuserinfo", {
       withCredentials: true,
     });
-    console.log(resp)
+    console.log(resp.data)
     dispatch({ type: FETCH_INITIAL_STATE_SUCCESS, payload: resp.data });
   } catch (error) {
     dispatch({ type: FETCH_INITIAL_STATE_FAIL, payload: error.response });
@@ -50,7 +50,6 @@ export const resetUserState = () => (dispatch) => {
 
 export const resetSelectedChild = () => (dispatch, getState) => {
   const children = getState().profile.children;
-  console.log('ran action')
   dispatch({
     type: RESET_SELECTED_CHILD,
     payload: children.length > 0 ? children[0] : "",

@@ -39,6 +39,7 @@ const AnalyticsGrid = ({state}) => {
   const [loading, setLoading] = useState(true);
   const [gameType, setGameType] = useState("");
   const classes = useStyles();
+  let language = state.user.language;
 
   const getUniqueGameNames = () => {
     const gameNames = [
@@ -56,9 +57,9 @@ const AnalyticsGrid = ({state}) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Typography style={{padding: "20px 0px"}} variant="h3" align="center">
-            Average scores for each game
+            {language === "English" ? "Average scores for each game" : "每个游戏的平均成绩"}
           </Typography>
-          <Grid container className={classes.buttonContainer}>
+          <Grid container className={classes.buttonContainer} spacing={4}>
             {loading
               ? "Loading"
               : getUniqueGameNames().map((a) => {
@@ -85,7 +86,8 @@ const AnalyticsGrid = ({state}) => {
         </Grid>
         <Grid item xs={12} md={12}>
           <Typography variant="h3" align="center">
-            Recent scores
+          {language === "English" ? "Recent scores" : "最近成绩"}
+            
           </Typography>
         </Grid>
         <Grid item xs={12} md={12}>
