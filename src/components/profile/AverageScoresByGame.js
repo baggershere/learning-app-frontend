@@ -32,9 +32,9 @@ const AverageScoresByGame = ({ game, child, state }) => {
       (item) => item["game_name"] === game && item["child_name"] === child
     );
     if (score[0]) {
-      setCurrentStudentData(parseInt(score[0].avg).toFixed(0));
+      setCurrentStudentData(parseInt(score[0].avg).toFixed(0) + "%");
     } else {
-      setCurrentStudentData("No data available, please select a child");
+      setCurrentStudentData("No data available");
     }
   };
 
@@ -43,9 +43,9 @@ const AverageScoresByGame = ({ game, child, state }) => {
 
     const score = scores.filter((item) => item["game_name"] === game);
     if (score[0]) {
-      setCurrentAverageData(parseInt(score[0].avg).toFixed(0));
+      setCurrentAverageData(parseInt(score[0].avg).toFixed(0) + "%");
     } else {
-      setCurrentAverageData("No data available, please select a child");
+      setCurrentAverageData("No data available");
     }
   };
 
@@ -61,18 +61,18 @@ const AverageScoresByGame = ({ game, child, state }) => {
       <Grid container>
         <Grid item xs={6}>
           <Typography variant="h3" align="center">
-            {language === "English" ? "Your score" : "你的成绩"}
+            <b>{language === "English" ? "My average" : "我的平均成绩"}</b>
           </Typography>
           <Typography variant="h3" align="center">
-            {currentStudentData}%
+            {currentStudentData}
           </Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h3" align="center">
-          {language === "English" ? "Student average" : "学生们的平均成绩"}
+          <b>{language === "English" ? "Student average" : "学生们的平均成绩"}</b>
           </Typography>
           <Typography variant="h3" align="center">
-            {currentAverageData}%
+            {currentAverageData}
           </Typography>
         </Grid>
       </Grid>

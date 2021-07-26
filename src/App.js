@@ -4,7 +4,12 @@ import Signup from "./screens/Signup";
 import Login from "./screens/Login";
 import Profile from "./screens/Profile";
 import "./index.css";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import {
+  createMuiTheme,
+  ThemeProvider,
+  CircularProgress,
+  makeStyles,
+} from "@material-ui/core";
 import { useCookies } from "react-cookie";
 import { purple } from "@material-ui/core/colors";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -12,7 +17,17 @@ import { setUserState } from "./redux/user/user.actions";
 import { useEffect } from "react";
 import GameScreen from "./screens/GameScreen";
 import Footer from "./components/Footer";
-
+const useStyles = makeStyles((theme) => {
+  return {
+    loading: {
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  };
+});
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -35,13 +50,19 @@ const theme = createMuiTheme({
 
 function App({ state, setUserState }) {
   const [cookies, setCookies] = useCookies(["authorization"]);
+  const classes = useStyles();
 
   useEffect(() => {
     setUserState();
   }, []);
 
   if (state.user.loading) {
-    return <h1>LOADING</h1>;
+    return (
+      <div className={classes.loading}>
+        <h2>Loading</h2>
+        <CircularProgress />
+      </div>
+    );
   } else {
     return (
       <ThemeProvider theme={theme}>

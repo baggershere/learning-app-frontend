@@ -50,6 +50,11 @@ const Sentences = ({ addScore }) => {
       type: createjs.Types.IMAGE,
       src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/countriesCat+(1).png",
     },
+    {
+      id: "speech",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/rijKkeX7T.png",
+    },
   ];
 
   let selectedCategory;
@@ -124,7 +129,14 @@ const Sentences = ({ addScore }) => {
       let background = new createjs.Shape();
       background.name = "background";
       background.graphics
-      .beginLinearGradientFill(["#36d1dc ","#5b86e5"], [0, .5, 1], 0, 200, 0, 600)
+        .beginLinearGradientFill(
+          ["#36d1dc ", "#5b86e5"],
+          [0, 0.5, 1],
+          0,
+          200,
+          0,
+          600
+        )
         .drawRect(0, 0, stage.canvas.width, stage.canvas.height);
       stage.addChild(background);
     }
@@ -159,9 +171,10 @@ const Sentences = ({ addScore }) => {
       const messageText = new createjs.Text();
       messageText.text = "Loading / 加载中";
       messageText.font = "25px Open Sans";
-      messageText.x = stage.canvas.width / 2 - messageText.getMeasuredWidth() / 2;
-      messageText.y = stage.canvas.height * 0.4
-      stage.addChild(text, messageText,progressContainer);
+      messageText.x =
+        stage.canvas.width / 2 - messageText.getMeasuredWidth() / 2;
+      messageText.y = stage.canvas.height * 0.4;
+      stage.addChild(text, messageText, progressContainer);
     }
     runLoadingScreen() {
       this.createBackground();
@@ -204,6 +217,7 @@ const Sentences = ({ addScore }) => {
         // Styling the shape
         categoryShape.color =
           categoryShape.graphics.beginFill("lightblue").command;
+        categoryShape.graphics.setStrokeStyle(4).beginStroke("black");
         categoryShape.graphics.drawRect(0, 0, 200, 50);
 
         // Positioning and naming the container
@@ -333,16 +347,46 @@ const Sentences = ({ addScore }) => {
         // Create word shape
         const wordShape = new createjs.Shape();
         wordShape.color = wordShape.graphics.beginFill("lightblue").command;
+        wordShape.graphics.setStrokeStyle(3).beginStroke("black");
         wordShape.graphics.drawRect(0, 0, phone ? 130 : 150, 50);
         // Create word text
         const wordText = new createjs.Text();
         wordText.text = this.shuffledArray[i];
         wordText.font = phone ? "25px Open Sans" : "30px Open Sans";
 
+        wordText.x = phone
+          ? 130 / 2 - wordText.getMeasuredWidth() / 2
+          : 150 / 2 - wordText.getMeasuredWidth() / 2;
+        wordText.y = 50 / 2 - wordText.getMeasuredHeight() / 2;
+
         wordContainer.addChild(wordShape, wordText);
         // Add dragging event listener
 
         this.currentWords.push(wordContainer);
+      }
+    }
+    displayInstructions() {
+      if (gameLevel == 1) {
+        let img = new createjs.Bitmap(loader.getResult("speech"));
+        let container = new createjs.Container();
+        img.scaleX = 250 / img.image.width;
+        img.scaleY = 120 / img.image.height;
+        container.x = phone
+          ? stage.canvas.width * 0.5 - 125
+          : stage.canvas.width * 0.66;
+        container.y = phone
+          ? stage.canvas.height * 0.7
+          : stage.canvas.height * 0.2;
+
+        let text_one = new createjs.Text();
+        text_one.lineWidth = 150;
+        text_one.text = "拖放单词将它们按 正确的顺序排列";
+        text_one.font = "20px Open Sans";
+        
+        text_one.x = 45;
+        text_one.y = 40;
+        container.addChild(img, text_one);
+        stage.addChild(container);
       }
     }
     displayLevelImage() {
@@ -357,7 +401,6 @@ const Sentences = ({ addScore }) => {
       stage.addChild(imageContainer);
     }
     handleMovement() {
-      console.log(this.playerWords);
       for (let i = 0; i < this.currentBoxes.length; i++) {
         stage.addChild(this.currentBoxes[i]);
       }
@@ -442,8 +485,12 @@ const Sentences = ({ addScore }) => {
 
       const buttonShape = new createjs.Shape();
       buttonShape.color = buttonShape.graphics.beginFill("pink").command;
+      buttonShape.graphics.setStrokeStyle(3).beginStroke("black");
       buttonShape.graphics.drawRect(0, 0, 150, 50);
       buttonContainer.addChild(buttonShape, buttonText);
+
+      buttonText.x = 150 / 2 - buttonText.getMeasuredWidth() / 2;
+      buttonText.y = 50 / 2 - buttonText.getMeasuredHeight() / 2;
 
       buttonContainer.on("mouseover", (e) => {
         buttonShape.color.style = "red";
@@ -512,6 +559,7 @@ const Sentences = ({ addScore }) => {
     }
     replayLevel() {
       this.createBackground();
+      this.displayInstructions()
       this.displayCurrentLevel();
       this.createEmpytyBoxes();
       this.displayLevelImage();
@@ -521,6 +569,7 @@ const Sentences = ({ addScore }) => {
     }
     displayLevelScreen() {
       this.createBackground();
+      this.displayInstructions()
       this.displayCurrentLevel();
       this.selectRandomSentence();
       this.displayLevelImage();
@@ -555,9 +604,12 @@ const Sentences = ({ addScore }) => {
       const buttonText = new createjs.Text();
       buttonText.text = "Play again";
       buttonText.font = "20px Open Sans";
+      buttonText.x = 150 / 2 - buttonText.getMeasuredWidth() / 2;
+      buttonText.y = 50 / 2 - buttonText.getMeasuredHeight() / 2;
 
       const buttonShape = new createjs.Shape();
       buttonShape.color = buttonShape.graphics.beginFill("pink").command;
+      buttonShape.graphics.setStrokeStyle(3).beginStroke("black");
       buttonShape.graphics.drawRect(0, 0, 150, 50);
       buttonContainer.addChild(buttonShape, buttonText);
 
@@ -607,7 +659,6 @@ const Sentences = ({ addScore }) => {
   };
   const calculateError = () => {
     return (correctGuesses / (correctGuesses + incorrectGuesses)) * 100;
-    
   };
   const handleResize = (e) => {
     window.innerWidth < 900 ? (phone = true) : (phone = false);

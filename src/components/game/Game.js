@@ -32,7 +32,7 @@ const Game = ({ name }) => {
           <Spelling />
         ) : name === "questions" ? (
           <Questions />
-        ) :(
+        ) : (
           <Typography align="center">
             Sorry, there is no game available under this name!
           </Typography>

@@ -12,7 +12,7 @@ import {
   TablePagination,
   TableFooter,
 } from "@material-ui/core";
-import {format} from "date-fns";
+import { format } from "date-fns";
 const RecentList = ({ child, game, data, state }) => {
   const [currentData, setCurrentData] = useState([]);
   const [page, setPage] = React.useState(0);
@@ -59,7 +59,6 @@ const RecentList = ({ child, game, data, state }) => {
             {currentData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
-                
                 return (
                   <TableRow>
                     <TableCell>{row.game_name}</TableCell>

@@ -149,6 +149,11 @@ const NounsGame = ({ addScore }) => {
       src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/england.png",
     },
     {
+      id: "pointer",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/cursor-png-transparent-7.png",
+    },
+    {
       id: "Italy",
       type: createjs.Types.IMAGE,
       src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/italy.png",
@@ -229,22 +234,78 @@ const NounsGame = ({ addScore }) => {
         ogg: "noExtensionOggFile",
       },
     },
-    // {
-    //   id: "unitedkingdommp3",
-    //   type: createjs.Types.SOUND,
-    //   src: {
-    //     mp3: "https://f000.backblazeb2.com/file/audio1262/flag_pics/UK.mp3",
-    //     ogg: "noExtensionOggFile",
-    //   },
-    // },
-    // {
-    //   id: "spainmp3",
-    //   type: createjs.Types.SOUND,
-    //   src: {
-    //     mp3: "https://f000.backblazeb2.com/file/audio1262/flag_sounds/spain.mp3",
-    //     ogg: "noExtensionOggFile",
-    //   },
-    // },
+    {
+      id: "Batmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/bat.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Bearmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/bear.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Beavermp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/beaver.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Birdmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/bird.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Camelmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/camel.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Catmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/cat.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Chickenmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/chicken.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Cowmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/cow.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Crabmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/crab.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
   ];
 
   let loadingProgress;
@@ -573,10 +634,29 @@ const NounsGame = ({ addScore }) => {
     }
     createLevel() {
       this.createBackground();
+      this.createInstructions();
       this.createHomeButton();
       this.createTextBox();
       this.createChoices();
       this.createScore();
+    }
+    createInstructions() {
+      if (score === 0) {
+        let img = new createjs.Bitmap(loader.getResult("pointer"));
+        img.scaleX = 30 / img.image.width;
+        img.scaleY = 30 / img.image.height;
+        img.x = phone ? 100 : 250;
+        img.y = phone ? stage.canvas.height / 2 : stage.canvas.height * 0.55;
+
+        let text = new createjs.Text();
+        text.text = "点击图片对应的字在框中";
+        text.font = "25px Open Sans";
+        text.x = this.stage.canvas.width / 2 + 20 - text.getMeasuredWidth() / 2;
+        text.y = phone
+          ? this.stage.canvas.height / 2
+          : this.stage.canvas.height * 0.55;
+        this.stage.addChild(img, text);
+      }
     }
     createScore() {
       let text = new createjs.Text(score + "/10", "20px Open Sans", "black");

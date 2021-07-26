@@ -34,7 +34,11 @@ const GameCard = ({ state, name, details, imageUrl, link }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="large" color="error">
+        <Button
+          size="large"
+          color="error"
+          onClick={() => history.push("/game/" + link)}
+        >
           {language === "English" ? "Play" : "玩一下"}
         </Button>
       </CardActions>

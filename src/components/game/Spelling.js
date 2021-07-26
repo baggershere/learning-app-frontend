@@ -8,7 +8,7 @@ import {
   selectRandomFromArray,
 } from "./util";
 
-const Spelling = ({addScore}) => {
+const Spelling = ({ addScore }) => {
   const containerRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const createjs = window.createjs;
@@ -59,6 +59,16 @@ const Spelling = ({addScore}) => {
       id: "audioIcon",
       type: createjs.Types.IMAGE,
       src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/audioIcon.png",
+    },
+    {
+      id: "home",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/n1612275.png",
+    },
+    {
+      id: "speech",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/rijKkeX7T.png",
     },
   ];
   let phone, stage, loader;
@@ -126,7 +136,14 @@ const Spelling = ({addScore}) => {
       let background = new createjs.Shape();
       background.name = "background";
       background.graphics
-      .beginLinearGradientFill(["#36d1dc ","#5b86e5"], [0, .5, 1], 0, 200, 0, 600)
+        .beginLinearGradientFill(
+          ["#36d1dc ", "#5b86e5"],
+          [0, 0.5, 1],
+          0,
+          200,
+          0,
+          600
+        )
         .drawRect(0, 0, stage.canvas.width, stage.canvas.height);
       stage.addChild(background);
     }
@@ -161,9 +178,10 @@ const Spelling = ({addScore}) => {
       const messageText = new createjs.Text();
       messageText.text = "Loading / 加载中";
       messageText.font = "25px Open Sans";
-      messageText.x = stage.canvas.width / 2 - messageText.getMeasuredWidth() / 2;
-      messageText.y = stage.canvas.height * 0.4
-      stage.addChild(text, messageText,progressContainer);
+      messageText.x =
+        stage.canvas.width / 2 - messageText.getMeasuredWidth() / 2;
+      messageText.y = stage.canvas.height * 0.4;
+      stage.addChild(text, messageText, progressContainer);
     }
     runLoadingScreen() {
       this.createBackground();
@@ -205,6 +223,7 @@ const Spelling = ({addScore}) => {
         // Styling the shape
         categoryShape.color =
           categoryShape.graphics.beginFill("lightblue").command;
+        categoryShape.graphics.setStrokeStyle(3).beginStroke("black");
         categoryShape.graphics.drawRect(0, 0, 200, 50);
 
         // Positioning and naming the container
@@ -282,8 +301,48 @@ const Spelling = ({addScore}) => {
         y_co += 50;
       });
     }
+    createHomeButton() {
+      let container = new createjs.Container();
+      container.x = 5;
+      container.y = 35;
+      let image = new createjs.Bitmap(loader.getResult("home"));
+      image.scaleX = 50 / image.image.width;
+      image.scaleY = 50 / image.image.height;
+      container.addChild(image);
+      container.on("click", (e) => {
+        gameState = "LOADED";
+        correctGuesses = 0;
+        incorrectGuesses = 0;
+        currentLevel = 1;
+        runGameLoop();
+      });
+      stage.addChild(container);
+    }
+    displayInstructions() {
+      if (currentLevel == 1) {
+        let img = new createjs.Bitmap(loader.getResult("speech"));
+        let container = new createjs.Container();
+        img.scaleX = 250 / img.image.width;
+        img.scaleY = 120 / img.image.height;
+        container.x = phone
+          ? stage.canvas.width * 0.5 - 125
+          : stage.canvas.width * 0.65;
+        container.y = phone
+          ? stage.canvas.height * 0.35
+          : stage.canvas.height * 0.2;
+
+        let text_one = new createjs.Text();
+        text_one.text = "听单词然后拼写";
+        text_one.font = "20px Open Sans";
+        text_one.lineWidth = 170;
+        text_one.x = 60;
+        text_one.y = 50;
+        container.addChild(img, text_one);
+        stage.addChild(container);
+      }
+    }
     displayKeyBoard() {
-      let y_co = 50;
+      let y_co = phone ? 100 : 150;
       for (let i = 0; i < this.keyboard.length; i++) {
         const keyContainer = new createjs.Container();
         keyContainer.x = y_co;
@@ -293,7 +352,10 @@ const Spelling = ({addScore}) => {
         keyShape.graphics.drawRect(0, 0, 50, 50);
         const keyLetter = new createjs.Text();
         keyLetter.text = this.keyboard[i].key;
-        this.keyboard[i].break ? (y_co = 50) : (y_co += 55);
+        keyLetter.font = "25px Open Sans";
+        keyLetter.x = 50 / 2 - keyLetter.getMeasuredWidth() / 2;
+        keyLetter.y = 50 / 2 - keyLetter.getMeasuredHeight() / 2;
+        this.keyboard[i].break ? (y_co = phone ? 100 : 150) : (y_co += 55);
         const tempText = new createjs.Text(
           this.keyboard[i].key,
           "20px Open Sans",
@@ -442,7 +504,7 @@ const Spelling = ({addScore}) => {
           }
           runGameLoop();
         });
-
+        
         buttonContainer.addChild(buttonShape, buttonText);
 
         stage.addChild(text, buttonContainer);
@@ -463,12 +525,14 @@ const Spelling = ({addScore}) => {
       image.scaleX = 200 / image.image.width;
       image.scaleY = 200 / image.image.height;
       imageContainer.x = stage.canvas.width * 0.5 - 200 / 2;
-      imageContainer.y = phone ? 50 : 10;
+      imageContainer.y = phone ? 75 : 30;
       imageContainer.addChild(image);
       stage.addChild(imageContainer);
     }
     runLevelScreen() {
       this.createBackground();
+      this.displayInstructions();
+      this.createHomeButton();
       this.displayCurrentLevel();
       this.displayEmptyLetters();
       this.displayKeyBoard();
@@ -483,14 +547,20 @@ const Spelling = ({addScore}) => {
       super();
     }
     showScore() {
-      fadeOutChildren(300)
+      fadeOutChildren(300);
       setTimeout(() => {
-        stage.children.forEach(child => child.name !== 'background' && stage.removeChild(child))
-        const scoreText = new createjs.Text("Score: " + calculateError() + "%", "30px Open Sans", "black")
-        scoreText.x = stage.canvas.width / 2 - scoreText.getMeasuredWidth()/2;
+        stage.children.forEach(
+          (child) => child.name !== "background" && stage.removeChild(child)
+        );
+        const scoreText = new createjs.Text(
+          "Score: " + calculateError() + "%",
+          "30px Open Sans",
+          "black"
+        );
+        scoreText.x = stage.canvas.width / 2 - scoreText.getMeasuredWidth() / 2;
         scoreText.y = stage.canvas.height * 0.4;
-        addScore(calculateError(), "Spelling")
-        stage.addChild(scoreText) 
+        addScore(calculateError(), "Spelling");
+        stage.addChild(scoreText);
 
         // play again button
         let buttonContainer = new createjs.Container();
@@ -510,8 +580,8 @@ const Spelling = ({addScore}) => {
         // Positioning the container
         buttonContainer.x = stage.canvas.width * 0.5 - 100;
         buttonContainer.y = stage.canvas.height * 0.6;
-        
-        buttonContainer.addChild(buttonShape, buttonText)
+
+        buttonContainer.addChild(buttonShape, buttonText);
 
         buttonContainer.on("mouseover", (e) => {
           e.currentTarget.children[0].color.style = "red";
@@ -521,16 +591,16 @@ const Spelling = ({addScore}) => {
           e.currentTarget.children[0].color.style = "lightblue";
         });
 
-        buttonContainer.on("click", e => {
+        buttonContainer.on("click", (e) => {
           currentLevel = 1;
           incorrectGuesses = 0;
           correctGuesses = 0;
           gameState = "RUN_LEVEL";
-          runGameLoop()
-        })
+          runGameLoop();
+        });
 
-        stage.addChild(buttonContainer)
-      },300)
+        stage.addChild(buttonContainer);
+      }, 300);
     }
     runEndGame() {
       this.showScore();
@@ -558,8 +628,8 @@ const Spelling = ({addScore}) => {
   };
 
   const calculateError = () => {
-    const score =  (correctGuesses / (correctGuesses + incorrectGuesses)) * 100;
-    return Math.round(score)
+    const score = (correctGuesses / (correctGuesses + incorrectGuesses)) * 100;
+    return Math.round(score);
   };
 
   const fadeOutChildren = (time) => {
@@ -616,7 +686,7 @@ const Spelling = ({addScore}) => {
     }
   }
   React.useEffect(() => {
-    console.log(window)
+    console.log(window);
     init();
     return () => {
       createjs.Sound.removeAllSounds();

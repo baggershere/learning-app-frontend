@@ -7,12 +7,27 @@ import ProfileChildren from "../components/profile/ProfileChildren";
 import { fetchProfileInfo } from "../redux/API/API.actions";
 import { connect } from "react-redux";
 import Footer from "../components/Footer";
+import {
+  CircularProgress,
+  CurcularProgress,
+  makeStyles,
+} from "@material-ui/core";
 
 axios.defaults.withCredentials = true;
-
+const useStyles = makeStyles((theme) => {
+  return {
+    loading: {
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  };
+});
 const Profile = ({ fetchProfileInfo, state }) => {
+  const classes = useStyles();
   const history = useHistory();
-  //const dispatch = useDispatch();
 
   React.useEffect(() => {
     console.log("ran");
@@ -28,7 +43,10 @@ const Profile = ({ fetchProfileInfo, state }) => {
     return (
       <React.Fragment>
         <Navbar />
-        <h1>Loading</h1>
+        <div className={classes.loading}>
+          <h1>Loading</h1>
+          <CircularProgress />
+        </div>
       </React.Fragment>
     );
   } else {

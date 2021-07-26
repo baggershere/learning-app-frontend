@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const AnalyticsGrid = ({state}) => {
+const AnalyticsGrid = ({ state }) => {
   const [loading, setLoading] = useState(true);
   const [gameType, setGameType] = useState("");
   const classes = useStyles();
@@ -43,7 +43,7 @@ const AnalyticsGrid = ({state}) => {
 
   const getUniqueGameNames = () => {
     const gameNames = [
-      ...new Set(state.profile.averageScoresByGame.map((a) => a.game_name)),
+      ...new Set(state.profile.averageOverallScores.map((a) => a.game_name)),
     ];
     return gameNames;
   };
@@ -56,8 +56,12 @@ const AnalyticsGrid = ({state}) => {
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
-          <Typography style={{padding: "20px 0px"}} variant="h3" align="center">
-            {language === "English" ? "Average scores for each game" : "每个游戏的平均成绩"}
+          <Typography
+            style={{ padding: "20px 0px" }}
+            variant="h3"
+            align="center"
+          >
+            <b>{language === "English" ? "Games" : "游戏"}</b>
           </Typography>
           <Grid container className={classes.buttonContainer} spacing={4}>
             {loading
@@ -86,8 +90,7 @@ const AnalyticsGrid = ({state}) => {
         </Grid>
         <Grid item xs={12} md={12}>
           <Typography variant="h3" align="center">
-          {language === "English" ? "Recent scores" : "最近成绩"}
-            
+            <b>{language === "English" ? "Recent scores" : "最近成绩"} </b>
           </Typography>
         </Grid>
         <Grid item xs={12} md={12}>
@@ -102,4 +105,4 @@ const AnalyticsGrid = ({state}) => {
   );
 };
 
-export default connect(state => ({state:state}), null)(AnalyticsGrid);
+export default connect((state) => ({ state: state }), null)(AnalyticsGrid);

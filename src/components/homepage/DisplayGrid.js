@@ -13,7 +13,7 @@ const DisplayGrid = ({ state }) => {
           ? "A game to improve your vocabulary. Many categories available"
           : "在不同的场景下，提高你的词汇量水平",
       imageUrl:
-        "https://images.pexels.com/photos/194511/pexels-photo-194511.jpeg?cs=srgb&dl=pexels-lalesh-aldarwish-194511.jpg&fm=jpg",
+        "https://f000.backblazeb2.com/file/audio1262/game_page_pics/nouns.png",
     },
     {
       name: language === "English" ? "Sentence builder" : "造句",
@@ -23,7 +23,7 @@ const DisplayGrid = ({ state }) => {
       ? "A game to improve your sentence structure. Many categories available"
       : "在不同的场景下，提高你的造句能力",
       imageUrl:
-        "https://images.pexels.com/photos/194511/pexels-photo-194511.jpeg?cs=srgb&dl=pexels-lalesh-aldarwish-194511.jpg&fm=jpg",
+        "https://f000.backblazeb2.com/file/audio1262/game_page_pics/sentence.png",
     },
     {
       name: language === "English" ? "Spelling" : "拼写",
@@ -32,7 +32,7 @@ const DisplayGrid = ({ state }) => {
       ? "A game to improve your spelling. Many categories available"
       : "在不同的场景下，提高你的拼写能力",
       imageUrl:
-        "https://images.pexels.com/photos/194511/pexels-photo-194511.jpeg?cs=srgb&dl=pexels-lalesh-aldarwish-194511.jpg&fm=jpg",
+        "https://f000.backblazeb2.com/file/audio1262/game_page_pics/spelling.png",
     },
     {
       name: language === "English" ? "Questions" : "问题",
@@ -41,7 +41,7 @@ const DisplayGrid = ({ state }) => {
       ? "A game to improve your ability to ask questions."
       : "提高你的问问题能力",
       imageUrl:
-        "https://images.pexels.com/photos/194511/pexels-photo-194511.jpeg?cs=srgb&dl=pexels-lalesh-aldarwish-194511.jpg&fm=jpg",
+        "https://f000.backblazeb2.com/file/audio1262/game_page_pics/questions.png",
     },
   ];
   return (

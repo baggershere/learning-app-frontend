@@ -50,6 +50,11 @@ const Questions = ({ addScore }) => {
       type: createjs.Types.IMAGE,
       src: "https://f000.backblazeb2.com/file/audio1262/questions/when_is_lunchIMG.png",
     },
+    {
+      id: "speech",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/rijKkeX7T.png",
+    },
   ];
 
   const init = () => {
@@ -99,7 +104,14 @@ const Questions = ({ addScore }) => {
       let background = new createjs.Shape();
       background.name = "background";
       background.graphics
-      .beginLinearGradientFill(["#36d1dc ","#5b86e5"], [0, .5, 1], 0, 200, 0, 600)
+        .beginLinearGradientFill(
+          ["#36d1dc ", "#5b86e5"],
+          [0, 0.5, 1],
+          0,
+          200,
+          0,
+          600
+        )
         .drawRect(0, 0, stage.canvas.width, stage.canvas.height);
       stage.addChild(background);
     }
@@ -153,17 +165,19 @@ const Questions = ({ addScore }) => {
     }
     displayImage() {
       const imageContainer = new createjs.Container();
-
+      imageContainer.alpha = 0;
       const image = new createjs.Bitmap(loader.getResult(this.level.imgID));
       image.scaleX = 250 / image.image.width;
       image.scaleY = 250 / image.image.height;
       imageContainer.x = stage.canvas.width * 0.5 - 200 / 2;
       imageContainer.y = phone ? 50 : 10;
       imageContainer.addChild(image);
+      createjs.Tween.get(imageContainer).to({ alpha: 1 }, 400);
       stage.addChild(imageContainer);
     }
     displayQuestion() {
       const questionContainer = new createjs.Container();
+      questionContainer.alpha = 0;
       questionContainer.name = this.level.question;
       const questionSquare = new createjs.Shape();
 
@@ -171,6 +185,7 @@ const Questions = ({ addScore }) => {
       this.questionText.font = "25px Open Sans";
 
       questionSquare.graphics.beginFill("white");
+      questionSquare.graphics.setStrokeStyle(3).beginStroke("black");
       questionSquare.graphics.drawRect(
         0,
         0,
@@ -190,6 +205,7 @@ const Questions = ({ addScore }) => {
       questionContainer.y = stage.canvas.height / 2;
 
       questionContainer.addChild(questionSquare, this.questionText);
+      createjs.Tween.get(questionContainer).to({ alpha: 1 }, 400);
       stage.addChild(questionContainer);
     }
     displayCurrentLevel() {
@@ -216,6 +232,7 @@ const Questions = ({ addScore }) => {
 
       // Styling the shape
       buttonShape.color = buttonShape.graphics.beginFill("lightblue").command;
+      buttonShape.graphics.setStrokeStyle(3).beginStroke("black");
       buttonShape.graphics.drawRect(0, 0, 200, 50);
 
       // Positioning the container
@@ -240,16 +257,43 @@ const Questions = ({ addScore }) => {
         runGameLoop();
       });
       buttonContainer.addChild(buttonShape, buttonText);
+      buttonContainer.alpha = 0;
+      createjs.Tween.get(buttonContainer).to({ alpha: 1 }, 400);
       stage.addChild(buttonContainer);
+    }
+    displayInstructions() {
+      if (currentLevel == 1) {
+        let img = new createjs.Bitmap(loader.getResult("speech"));
+        let container = new createjs.Container();
+        img.scaleX = 250 / img.image.width;
+        img.scaleY = 120 / img.image.height;
+        container.x = phone
+          ? stage.canvas.width * 0.5 - 125
+          : stage.canvas.width * 0.66;
+        container.y = phone
+          ? stage.canvas.height * 0.81
+          : stage.canvas.height * 0.2;
+
+        let text_one = new createjs.Text();
+        text_one.lineWidth = 150;
+        text_one.text = "拖放单词将它们按 正确的顺序排列";
+        text_one.font = "20px Open Sans";
+
+        text_one.x = 45;
+        text_one.y = 40;
+        container.addChild(img, text_one);
+        stage.addChild(container);
+      }
     }
     displayOptions() {
       // Option one
       const option_one_container = new createjs.Container();
+      option_one_container.alpha = 0;
       option_one_container.x = stage.canvas.width * 0.2;
       option_one_container.y = stage.canvas.height * 0.65;
       option_one_container.name = this.level.options[0];
       const option_one_shape = new createjs.Shape();
-
+      option_one_shape.graphics.setStrokeStyle(3).beginStroke("black");
       option_one_shape.graphics.beginFill("white").drawRect(0, 0, 130, 40);
 
       const option_one_text = new createjs.Text();
@@ -284,7 +328,11 @@ const Questions = ({ addScore }) => {
         }
         if (option_one_container.name !== this.level.answer) {
           incorrect++;
-          stage.removeChild(option_one_container);
+          createjs.Tween.get(option_one_container)
+            .to({ alpha: 0 }, 300)
+            .call(() => {
+              stage.removeChild(option_one_container);
+            });
         }
       });
 
@@ -292,11 +340,12 @@ const Questions = ({ addScore }) => {
 
       // Option two
       const option_two_container = new createjs.Container();
+      option_two_container.alpha = 0;
       option_two_container.x = stage.canvas.width * 0.6;
       option_two_container.y = stage.canvas.height * 0.65;
       option_two_container.name = this.level.options[1];
       const option_two_shape = new createjs.Shape();
-
+      option_two_shape.graphics.setStrokeStyle(3).beginStroke("black");
       option_two_shape.graphics.beginFill("white").drawRect(0, 0, 130, 40);
 
       const option_two_text = new createjs.Text();
@@ -331,7 +380,11 @@ const Questions = ({ addScore }) => {
         }
         if (option_two_container.name !== this.level.answer) {
           incorrect++;
-          stage.removeChild(option_two_container);
+          createjs.Tween.get(option_two_container)
+            .to({ alpha: 0 }, 300)
+            .call(() => {
+              stage.removeChild(option_two_container);
+            });
         }
       });
 
@@ -339,11 +392,12 @@ const Questions = ({ addScore }) => {
 
       // Option three
       const option_three_container = new createjs.Container();
+      option_three_container.alpha = 0;
       option_three_container.x = stage.canvas.width * 0.2;
       option_three_container.y = stage.canvas.height * 0.75;
       option_three_container.name = this.level.options[2];
       const option_three_shape = new createjs.Shape();
-
+      option_three_shape.graphics.setStrokeStyle(3).beginStroke("black");
       option_three_shape.graphics.beginFill("white").drawRect(0, 0, 130, 40);
 
       const option_three_text = new createjs.Text();
@@ -378,7 +432,11 @@ const Questions = ({ addScore }) => {
         }
         if (option_three_container.name !== this.level.answer) {
           incorrect++;
-          stage.removeChild(option_three_container);
+          createjs.Tween.get(option_three_container)
+            .to({ alpha: 0 }, 300)
+            .call(() => {
+              stage.removeChild(option_three_container);
+            });
         }
       });
 
@@ -386,11 +444,12 @@ const Questions = ({ addScore }) => {
 
       // Option four
       const option_four_container = new createjs.Container();
+      option_four_container.alpha = 0;
       option_four_container.x = stage.canvas.width * 0.6;
       option_four_container.y = stage.canvas.height * 0.75;
       option_four_container.name = this.level.options[3];
       const option_four_shape = new createjs.Shape();
-
+      option_four_shape.graphics.setStrokeStyle(3).beginStroke("black");
       option_four_shape.graphics.beginFill("white").drawRect(0, 0, 130, 40);
 
       const option_four_text = new createjs.Text();
@@ -425,11 +484,19 @@ const Questions = ({ addScore }) => {
         }
         if (option_four_container.name !== this.level.answer) {
           incorrect++;
-          stage.removeChild(option_four_container);
+          createjs.Tween.get(option_four_container)
+            .to({ alpha: 0 }, 300)
+            .call(() => {
+              stage.removeChild(option_four_container);
+            });
         }
       });
 
       option_four_container.addChild(option_four_shape, option_four_text);
+      createjs.Tween.get(option_one_container).to({ alpha: 1 }, 400);
+      createjs.Tween.get(option_two_container).to({ alpha: 1 }, 400);
+      createjs.Tween.get(option_three_container).to({ alpha: 1 }, 400);
+      createjs.Tween.get(option_four_container).to({ alpha: 1 }, 400);
 
       stage.addChild(
         option_one_container,
@@ -440,6 +507,7 @@ const Questions = ({ addScore }) => {
     }
     runGameScreen() {
       this.createBackground();
+      this.displayInstructions();
       this.displayCurrentLevel();
       this.displayImage();
       this.displayQuestion();
@@ -476,6 +544,7 @@ const Questions = ({ addScore }) => {
 
       // Styling the shape
       buttonShape.color = buttonShape.graphics.beginFill("lightblue").command;
+      buttonShape.graphics.setStrokeStyle(3).beginStroke("black");
       buttonShape.graphics.drawRect(0, 0, 200, 50);
 
       // Positioning the container
