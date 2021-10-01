@@ -70,14 +70,397 @@ const Spelling = ({ addScore }) => {
       type: createjs.Types.IMAGE,
       src: "https://f000.backblazeb2.com/file/audio1262/rijKkeX7T.png",
     },
+    {
+      id: "yellowIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/yellowIMG.png",
+    },
+    {
+      id: "greenIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/greenIMG.png",
+    },
+    {
+      id: "brownIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/brownIMG.png",
+    },
+    {
+      id: "greyIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/greyIMG.png",
+    },
+    {
+      id: "purpleIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/purpleIMG.png",
+    },
+
+    {
+      id: "pinkIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/pinkIMG.png",
+    },
+    {
+      id: "orangeIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/orangeIMG.png",
+    },
+    {
+      id: "blackIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/blackIMG.png",
+    },
+    {
+      id: "whiteIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/whiteIMG.bmp",
+    },
+    {
+      id: "yellowmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/yellowmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "greenmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/greenmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "brownmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/brownmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "greymp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/greymp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "purplemp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/purplemp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "pinkmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/pinkmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "orangemp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/orangemp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "blackmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/blackmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "whitemp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/whitemp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "batIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/batIMG.png",
+    },
+    {
+      id: "bearIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/bearIMG.png",
+    },
+    {
+      id: "beaverIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/beaverIMG.png",
+    },
+    {
+      id: "birdIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/birdIMG.png",
+    },
+    {
+      id: "camelIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/camelIMG.png",
+    },
+    {
+      id: "catIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/catIMG.png",
+    },
+    {
+      id: "chickenIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/chickenIMG.png",
+    },
+    {
+      id: "cowIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/cowIMG.png",
+    },
+    {
+      id: "crabIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/crabIMG.png",
+    },
+    {
+      id: "dogIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/dogIMG.png",
+    },
+    {
+      id: "elephantIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/elephantIMG.png",
+    },
+    {
+      id: "monkeyIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/monkeyIMG.jpg",
+    },
+    {
+      id: "pigIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/pigIMG.png",
+    },
+    {
+      id: "fishIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/fishIMG.png",
+    },
+    {
+      id: "lionIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/lionIMG.png",
+    },
+    {
+      id: "sheepIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/sheepIMG.png",
+    },
+    {
+      id: "whaleIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/whaleIMG.png",
+    },
+    {
+      id: "foxIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/spelling/images/foxIMG.png",
+    },
+    {
+      id: "batmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Batmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "bearmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Bearmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "beavermp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Beavermp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "birdmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Birdmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "camelmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Camelmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "catmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Catmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "chickenmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Chickenmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "cowmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Cowmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "crabmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Crabmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "dogmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Dogmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "elephantmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Elephantmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "monkeymp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Monkeymp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "pigmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Pigmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "fishmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Fishmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "lionmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Lionmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "sheepmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Sheepmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "whalemp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Whalemp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "foxmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/spelling/sounds/Foxmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    }
   ];
   let phone, stage, loader;
   let percentLoaded = 0;
   let gameState = "LOADING";
   let categories = ["Animals", "Colours"];
   let words = {
-    Animals: ["rabbit", "mongoose"],
-    Colours: ["blue", "red"],
+    Animals: [
+      "bat",
+      "bear",
+      "beaver",
+      "bird",
+      "camel",
+      "cat",
+      "chicken",
+      "cow",
+      "crab",
+      "dog",
+      "elephant",
+      "monkey",
+      "pig",
+      "fish",
+      "lion",
+      "sheep",
+      "whale",
+      "fox",
+    ],
+    Colours: [
+      "blue",
+      "red",
+      "yellow",
+      "green",
+      "brown",
+      "grey",
+      "purple",
+      "pink",
+      "orange",
+      "black",
+      "white",
+    ],
   };
   let incorrectGuesses = 0;
   let correctGuesses = 0;
@@ -93,8 +476,8 @@ const Spelling = ({ addScore }) => {
 
     createjs.Sound.volume = 0.5;
     loader = new createjs.LoadQueue(false, null, true);
-    loader.installPlugin(createjs.Sound);
     loader.loadManifest(manifest);
+    loader.installPlugin(createjs.Sound);
     loader.addEventListener("error", function (e) {
       console.log(e);
     });
@@ -504,7 +887,7 @@ const Spelling = ({ addScore }) => {
           }
           runGameLoop();
         });
-        
+
         buttonContainer.addChild(buttonShape, buttonText);
 
         stage.addChild(text, buttonContainer);
@@ -518,7 +901,7 @@ const Spelling = ({ addScore }) => {
     }
     displayImage() {
       const imageContainer = new createjs.Container();
-
+      console.log(this.correctWord);
       const image = new createjs.Bitmap(
         loader.getResult(this.correctWord + "IMG")
       );

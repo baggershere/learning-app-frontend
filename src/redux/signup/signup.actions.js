@@ -10,7 +10,7 @@ export const signupUser = (email, name, password) => async (dispatch) => {
   try {
     dispatch({ type: REQUEST_USER_SIGNUP });
     const resp = await axios.post(
-      "http://localhost:5000/api/signup",
+      "https://esl-games-backend.herokuapp.com/api/signup",
       {
         email,
         name,

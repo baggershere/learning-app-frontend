@@ -15,7 +15,7 @@ export const fetchProfileInfo = () => async (dispatch, getState) => {
   try {
     dispatch({ type: REQUEST_PROFILE_API });
     const { data } = await axios.post(
-      "http://localhost:5000/api/fetchprofileinfo",
+      "https://esl-games-backend.herokuapp.com/api/fetchprofileinfo",
       { withCredentials: true }
     );
     const selectedChild = getState().user.selectedChild;
@@ -36,7 +36,7 @@ export const addChild = (name) => async (dispatch) => {
   try {
     dispatch({ type: ADD_CHILD_REQUEST });
     await axios.post(
-      "http://localhost:5000/api/addchild",
+      "https://esl-games-backend.herokuapp.com/api/addchild",
       { childName: name },
       { withCredentials: true }
     );
@@ -53,7 +53,7 @@ export const addChild = (name) => async (dispatch) => {
 export const removeChild = (name) => async (dispatch) => {
   dispatch({ type: REMOVE_CHILD, payload: name });
   await axios.post(
-    "http://localhost:5000/api/removechild",
+    "https://esl-games-backend.herokuapp.com/api/removechild",
     { childName: name },
     { withCredentials: true }
   );
@@ -65,7 +65,7 @@ export const addScores = (score, game) => async (dispatch, getState) => {
   console.log(score, game, selectedChild, email);
 
   await axios.post(
-    "http://localhost:5000/api/submitgamescore",
+    "https://esl-games-backend.herokuapp.com/api/submitgamescore",
     {
       childName: selectedChild,
       gameName: game,

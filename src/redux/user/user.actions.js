@@ -9,7 +9,7 @@ import {
   RESET_USER_STATE,
   RESET_SELECTED_CHILD,
   SET_SELECTED_CHILD,
-  SWITCH_LANGUAGE
+  SWITCH_LANGUAGE,
 } from "./user.types";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -17,7 +17,7 @@ export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: REQUEST_LOGIN });
     const resp = await axios.post(
-      "http://localhost:5000/api/login",
+      "https://esl-games-backend.herokuapp.com/api/login",
       {
         email,
         password,
@@ -34,10 +34,13 @@ export const login = (email, password) => async (dispatch) => {
 export const setUserState = (jwt) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_INITIAL_STATE });
-    const resp = await axios.post("http://localhost:5000/api/fetchuserinfo", {
-      withCredentials: true,
-    });
-    console.log(resp.data)
+    const resp = await axios.post(
+      "https://esl-games-backend.herokuapp.com/api/fetchuserinfo",
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(resp.data);
     dispatch({ type: FETCH_INITIAL_STATE_SUCCESS, payload: resp.data });
   } catch (error) {
     dispatch({ type: FETCH_INITIAL_STATE_FAIL, payload: error.response });
@@ -57,6 +60,7 @@ export const resetSelectedChild = () => (dispatch, getState) => {
 };
 
 export const switchLanguage = () => (dispatch, getState) => {
-  const newLanguage = getState().user.language === "English" ? "Chinese" : "English"
+  const newLanguage =
+    getState().user.language === "English" ? "Chinese" : "English";
   dispatch({ type: SWITCH_LANGUAGE, payload: newLanguage });
 };

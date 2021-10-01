@@ -13,8 +13,14 @@ const Questions = ({ addScore }) => {
   let incorrect = 0;
   let phone;
   let gameState = "LOADING";
-  let currentLevel = 9;
+  let currentLevel = 1;
   const gameData = [
+    {
+      question: "is your name?",
+      answer: "What",
+      options: ["When", "Who", "Is", "What"],
+      imgID: "what_is_your_nameIMG",
+    },
     {
       question: "is he eating?",
       answer: "What",
@@ -33,8 +39,68 @@ const Questions = ({ addScore }) => {
       options: ["Are", "Who", "What", "Is"],
       imgID: "is_he_a_studentIMG",
     },
+    {
+      question: "you speak Japanese?",
+      answer: "Can",
+      options: ["Are", "Is", "Why", "Can"],
+      imgID: "can_you_speak_japaneseIMG",
+    },
+    {
+      question: "are you from?",
+      answer: "Where",
+      options: ["Where", "Who", "Why", "What"],
+      imgID: "where_are_you_fromIMG",
+    },
+    {
+      question: "old are you?",
+      answer: "How",
+      options: ["Where", "Are", "How", "What"],
+      imgID: "how_old_are_youIMG",
+    },
+    {
+      question: "is your favourite colour?",
+      answer: "What",
+      options: ["What", "How", "Where", "Are"],
+      imgID: "what_is_your_favourite_colourIMG",
+    },
+    {
+      question: "do you live?",
+      answer: "Where",
+      options: ["Why", "How", "What", "Where"],
+      imgID: "where_do_you_liveIMG",
+    },
   ];
   const manifest = [
+    {
+      id: "where_do_you_liveIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/questions/where_do_you_liveIMG.png",
+    },
+    {
+      id: "what_is_your_favourite_colourIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/questions/what_is_your_favourite_colourIMG.png",
+    },
+    {
+      id: "how_old_are_youIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/questions/how_old_are_youIMG.png",
+    },
+    {
+      id: "what_is_your_nameIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/questions/what_is_your_nameIMG.png",
+    },
+    {
+      id: "where_are_you_fromIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/questions/where_are_you_fromIMG.png",
+    },
+    {
+      id: "can_you_speak_japaneseIMG",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/questions/can_you_speak_japaneseIMG.png",
+    },
     {
       id: "what_is_he_eatingIMG",
       type: createjs.Types.IMAGE,
@@ -169,7 +235,7 @@ const Questions = ({ addScore }) => {
       const image = new createjs.Bitmap(loader.getResult(this.level.imgID));
       image.scaleX = 250 / image.image.width;
       image.scaleY = 250 / image.image.height;
-      imageContainer.x = stage.canvas.width * 0.5 - 200 / 2;
+      imageContainer.x = stage.canvas.width * 0.5 - 250 / 2;
       imageContainer.y = phone ? 50 : 10;
       imageContainer.addChild(image);
       createjs.Tween.get(imageContainer).to({ alpha: 1 }, 400);
@@ -254,6 +320,7 @@ const Questions = ({ addScore }) => {
         if (currentLevel > 10) {
           gameState = "RUN_END_GAME";
         }
+        stage.removeAllChildren()
         runGameLoop();
       });
       buttonContainer.addChild(buttonShape, buttonText);

@@ -32,6 +32,15 @@ const NounsGame = ({ addScore }) => {
       "Chicken",
       "Cow",
       "Crab",
+      "Dog",
+      "Elephant",
+      "Monkey",
+      "Pig",
+      "Fish",
+      "Lion",
+      "Sheep",
+      "Whale",
+      "Fox",
     ],
     Countries: [
       "England",
@@ -41,6 +50,12 @@ const NounsGame = ({ addScore }) => {
       "America",
       "Japan",
       "China",
+      "Germany",
+      "Russia",
+      "Australia",
+      "Brazil",
+      "Ireland",
+      "Vietnam",
     ],
   };
   const animals = [];
@@ -48,6 +63,81 @@ const NounsGame = ({ addScore }) => {
   let stage, phone, loader;
   let gameState = "LOADING";
   let manifest = [
+    {
+      id: "Vietnam",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/vietnam.jpg",
+    },
+    {
+      id: "Ireland",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/ireland.jpg",
+    },
+    {
+      id: "Brazil",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/brazil.png",
+    },
+    {
+      id: "Australia",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/australia.png",
+    },
+    {
+      id: "Russia",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/russia.png",
+    },
+    {
+      id: "Germany",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/germany.png",
+    },
+    {
+      id: "Fox",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/fox.png",
+    },
+    {
+      id: "Whale",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/whale.png",
+    },
+    {
+      id: "Sheep",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/sheep.png",
+    },
+    {
+      id: "Lion",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/lion.png",
+    },
+    {
+      id: "Fish",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/fish.png",
+    },
+    {
+      id: "Pig",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/pig.png",
+    },
+    {
+      id: "Monkey",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/monkey.jpg",
+    },
+    {
+      id: "Elephant",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/elephant.png",
+    },
+    {
+      id: "Dog",
+      type: createjs.Types.IMAGE,
+      src: "https://f000.backblazeb2.com/file/audio1262/nouns/images/dog.png",
+    },
     {
       id: "tree",
       type: createjs.Types.IMAGE,
@@ -306,9 +396,129 @@ const NounsGame = ({ addScore }) => {
         ogg: "noExtensionOggFile",
       },
     },
+    {
+      id: "Dogmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Dogmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Elephantmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Elephantmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Fishmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Fishmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Foxmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Foxmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Lionmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Lionmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Monkeymp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Monkeymp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Pigmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Pigmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Sheepmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Sheepmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Whalemp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/animals/Whalemp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Australiamp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/countries/australiamp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Brazilmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/countries/brazilmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Germanymp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/countries/germanymp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Irelandmp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/countries/irelandmp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Russiamp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/countries/russiamp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
+    {
+      id: "Vietnammp3",
+      type: createjs.Types.SOUND,
+      src: {
+        mp3: "https://f000.backblazeb2.com/file/audio1262/nouns/sounds/countries/vietnammp3.mp3",
+        ogg: "noExtensionOggFile",
+      },
+    },
   ];
 
-  let loadingProgress;
+  let loadingProgress = 0;
   let score = 0;
   let wrong = 0;
 
@@ -389,6 +599,7 @@ const NounsGame = ({ addScore }) => {
     let sliced = shuffled.slice(0, 3);
     sliced.push(randomItem);
     let final = shuffle(sliced);
+
     levelTarget = randomItem;
     levelOptions = final;
     levelStatus = true;
@@ -619,8 +830,17 @@ const NounsGame = ({ addScore }) => {
         this.stage.addChild(container);
       }
     }
+    createInstructions() {
+      const text = new createjs.Text();
+      text.text = "Choose One";
+      text.font = "25px Open Sans";
+      text.x = stage.canvas.width / 2 - text.getMeasuredWidth() / 2;
+      text.y = 20;
+      stage.addChild(text);
+    }
     createCategoriesScreen() {
       this.createBackground();
+      this.createInstructions();
       this.createCategories();
     }
   }
@@ -688,16 +908,25 @@ const NounsGame = ({ addScore }) => {
       text.y = 50 / 2 - text.getMeasuredHeight() / 2;
     }
     createChoices() {
+      // Audio is played.
       createjs.Sound.play(this.targetItem + "mp3");
+      // For each choice, an image is placed on the screen.
       for (let i = 0; i < this.itemOptions.length; i++) {
+        // A container to hold the image is placed
         let container = new createjs.Container();
+        // The container is named so it can be identified later
         container.name = this.itemOptions[i];
+        // A block is created to sit inside the container.
         let shape = new createjs.Shape();
         shape.color = shape.graphics.beginFill("white").command;
         shape.graphics.drawRect(0, 0, 100, 100);
+        // An image from a list of pre-loaded assets is created and sized.
         let bitmap = new createjs.Bitmap(loader.getResult(this.itemOptions[i]));
         bitmap.scaleX = 150 / bitmap.image.width;
         bitmap.scaleY = 100 / bitmap.image.height;
+        // image is added to the container and the container is placed on the canvas
+        
+        
 
         if (phone) {
           container.y =
